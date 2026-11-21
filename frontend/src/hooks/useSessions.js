@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { sessionApi } from "../api/sessions";
 
@@ -62,4 +62,19 @@ export const useEndSession = () => {
     });
 
     return result;
+};
+
+export const useSetSessionProblem = (sessionId) => {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: (data) => sessionApi.setSessionProblem(sessionId, data),
+        onSuccess: () => {
+            toast.success("Problem set for this session!");
+            queryClient.invalidateQueries({ queryKey: ["session", sessionId] });
+            queryClient.invalidateQueries({ queryKey: ["activeSessions"] });
+        },
+        onError: (error) =>
+            toast.error(error.response?.data?.message || "Failed to set the problem"),
+    });
 };

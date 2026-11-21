@@ -2,14 +2,15 @@ import mongoose from "mongoose";
 
 const sessionSchema = new mongoose.Schema(
     {
+        // chosen by the host after the room is created
         problem: {
             type: String,
-            required: true,
+            default: null,
         },
         difficulty: {
             type: String,
             enum: ["easy", "medium", "hard"],
-            required: true,
+            default: null,
         },
         host: {
             type: mongoose.Schema.Types.ObjectId,

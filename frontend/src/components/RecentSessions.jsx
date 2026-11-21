@@ -21,10 +21,14 @@ function SessionCard({ session, index }) {
                     <Code2 className="size-5 text-[var(--gold)]" strokeWidth={1.5} />
                 </span>
                 <div className="min-w-0 pt-0.5">
-                    <h3 className="truncate pr-8 font-semibold text-[#f0ece3]">{session.problem}</h3>
-                    <span className={`badge mt-2 ${getDifficultyBadgeClass(session.difficulty)}`}>
-                        {session.difficulty}
-                    </span>
+                    <h3 className="truncate pr-8 font-semibold text-[#f0ece3]">
+                        {session.problem || "Untitled session"}
+                    </h3>
+                    {session.difficulty && (
+                        <span className={`badge mt-2 ${getDifficultyBadgeClass(session.difficulty)}`}>
+                            {session.difficulty}
+                        </span>
+                    )}
                 </div>
             </div>
 

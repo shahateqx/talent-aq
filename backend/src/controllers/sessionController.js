@@ -3,31 +3,67 @@ import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
     try {
-        const { problem, difficulty } = req.body;
         const userId = req.user._id;
         const clerkId = req.user.clerkId;
 
-        if (!problem || !difficulty) {
-            return res.status(400).json({ message: "Problem and difficulty are required" });
-        }
-
         const callId = `session_${Date.now()}_${Math.random().toString(36).substring(7)}`;
-        const session = await Session.create({ problem, difficulty, host: userId, callId });
+        const session = await Session.create({ host: userId, callId });
 
         await Promise.all([
             streamClient.video.call("default", callId).getOrCreate({
                 data: {
                     created_by_id: clerkId,
                     members: [{ user_id: clerkId, role: "host" }],
-                    custom: { problem, difficulty, sessionId: session._id.toString() },
+                    custom: { sessionId: session._id.toString() },
                 },
             }),
-            chatClient.channel("messaging", callId, { name: `${problem} Session`, created_by_id: clerkId, members: [clerkId] }).create(),
+            chatClient.channel("messaging", callId, {
+                name: "Coding Session",
+                created_by_id: clerkId,
+                members: [clerkId],
+            }).create(),
         ]);
 
         res.status(201).json({ session });
     } catch (error) {
         console.error("createSession error:", error.message);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+}
+
+// Only the host can choose (or change) the problem for a session.
+export async function setSessionProblem(req, res) {
+    try {
+        const { problem, difficulty } = req.body;
+        const session = await Session.findById(req.params.id);
+
+        if (!session) return res.status(404).json({ message: "Session not found" });
+        if (session.host.toString() !== req.user._id.toString()) {
+            return res.status(403).json({ message: "Only the host can choose the problem" });
+        }
+        if (!problem || !difficulty) {
+            return res.status(400).json({ message: "Problem and difficulty are required" });
+        }
+
+        session.problem = problem;
+        session.difficulty = difficulty.toLowerCase();
+        await session.save();
+
+        try {
+            await streamClient.video.call("default", session.callId).update({
+                custom: {
+                    problem: session.problem,
+                    difficulty: session.difficulty,
+                    sessionId: session._id.toString(),
+                },
+            });
+        } catch (error) {
+            console.error("Failed to sync problem to call:", error.message);
+        }
+
+        res.status(200).json({ session });
+    } catch (error) {
+        console.error("setSessionProblem error:", error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 }

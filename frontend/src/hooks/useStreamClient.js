@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { StreamChat } from "stream-chat";
 import toast from "react-hot-toast";
 import { initializeStreamClient, disconnectStreamClient } from "../lib/stream";
@@ -11,14 +11,20 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
     const [channel, setChannel] = useState(null);
     const [isInitializingCall, setIsInitializingCall] = useState(true);
 
+    // The session query polls every few seconds; only re-join when something
+    // that actually affects the call changes.
+    const sessionRef = useRef(session);
+    sessionRef.current = session;
+
     useEffect(() => {
+        const activeSession = sessionRef.current;
         let videoCall = null;
         let chatClientInstance = null;
 
         const initCall = async () => {
-            if (!session?.callId) return;
+            if (!activeSession?.callId) return;
             if (!isHost && !isParticipant) return;
-            if (session.status === "completed") return;
+            if (activeSession.status === "completed") return;
 
             try {
                 const { token, userId, userName, userImage } = await sessionApi.getStreamToken();
@@ -34,7 +40,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
 
                 setStreamClient(client);
 
-                videoCall = client.call("default", session.callId);
+                videoCall = client.call("default", activeSession.callId);
                 await videoCall.join({ create: true });
                 setCall(videoCall);
 
@@ -57,7 +63,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
                 
                 setChatClient(chatClientInstance);
 
-                const chatChannel = chatClientInstance.channel("messaging", session.callId);
+                const chatChannel = chatClientInstance.channel("messaging", activeSession.callId);
                 await chatChannel.watch();
                 setChannel(chatChannel);
             } catch (error) {
@@ -68,7 +74,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
             }
         };
 
-        if (session && !loadingSession) initCall();
+        if (activeSession && !loadingSession) initCall();
 
         // cleanup - performance reasons
         return () => {
@@ -83,7 +89,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
                 }
             })();
         };
-    }, [session, loadingSession, isHost, isParticipant]);
+    }, [session?._id, session?.callId, session?.status, loadingSession, isHost, isParticipant]);
 
     return {
         streamClient,

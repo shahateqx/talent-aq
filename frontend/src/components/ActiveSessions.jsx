@@ -27,10 +27,14 @@ function SessionRow({ session, index, isUserInSession }) {
 
                 <div className="min-w-0 flex-1">
                     <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                        <h3 className="truncate text-[15px] font-semibold text-[#f0ece3]">{session.problem}</h3>
-                        <span className={`badge ${getDifficultyBadgeClass(session.difficulty)}`}>
-                            {session.difficulty}
-                        </span>
+                        <h3 className="truncate text-[15px] font-semibold text-[#f0ece3]">
+                            {session.problem || "Problem to be chosen"}
+                        </h3>
+                        {session.difficulty && (
+                            <span className={`badge ${getDifficultyBadgeClass(session.difficulty)}`}>
+                                {session.difficulty}
+                            </span>
+                        )}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#8d919b]">
                         <span className="flex items-center gap-1.5">

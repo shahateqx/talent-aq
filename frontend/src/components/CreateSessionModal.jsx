@@ -1,21 +1,11 @@
-import { Code2Icon, LoaderIcon, PlusIcon, XIcon } from "lucide-react";
-import { PROBLEMS } from "../data/problems";
+import { LoaderIcon, PlusIcon, SparklesIcon, XIcon } from "lucide-react";
 
-function CreateSessionModal({
-    isOpen,
-    onClose,
-    roomConfig,
-    setRoomConfig,
-    onCreateRoom,
-    isCreating,
-}) {
-    const problems = Object.values(PROBLEMS);
-
+function CreateSessionModal({ isOpen, onClose, onCreateRoom, isCreating }) {
     if (!isOpen) return null;
 
     return (
         <div className="modal modal-open">
-            <div className="modal-box relative max-w-xl !p-0">
+            <div className="modal-box relative max-w-lg !p-0">
                 <div className="glow-orb -right-20 -top-24 size-64 bg-[rgba(163,126,72,0.14)]" />
 
                 <div className="relative border-b border-[var(--line)] px-7 py-6">
@@ -28,50 +18,26 @@ function CreateSessionModal({
                     </button>
                     <span className="eyebrow">New room</span>
                     <h3 className="display-serif mt-2 text-3xl text-[#f3efe6]">Create a session</h3>
-                    <p className="mt-1.5 text-sm text-[#8d919b]">
-                        Choose a problem, then share the room with your partner.
+                    <p className="mt-1.5 text-sm leading-relaxed text-[#8d919b]">
+                        Set up the room first. As the host, you'll choose the coding problem once
+                        you're inside.
                     </p>
                 </div>
 
                 <div className="relative px-7 py-7">
-                    <label className="mb-2 block">
-                        <span className="eyebrow !tracking-[0.16em] !text-[#888d97]">Select problem</span>
-                    </label>
-                    <select
-                        className="select w-full !rounded-xl !bg-[#0a0d13]/80"
-                        value={roomConfig.problem}
-                        onChange={(e) => {
-                            const selectedProblem = problems.find((p) => p.title === e.target.value);
-                            setRoomConfig({
-                                difficulty: selectedProblem.difficulty,
-                                problem: e.target.value,
-                            });
-                        }}
-                    >
-                        <option value="" disabled>
-                            Choose a coding problem…
-                        </option>
-                        {problems.map((problem) => (
-                            <option key={problem.id} value={problem.title}>
-                                {problem.title} · {problem.difficulty}
-                            </option>
-                        ))}
-                    </select>
-
-                    {roomConfig.problem && (
-                        <div className="mt-6 flex gap-4 rounded-2xl border border-[rgba(216,185,138,0.2)] bg-[rgba(216,185,138,0.06)] p-5">
-                            <span className="grid size-10 shrink-0 place-items-center rounded-full border border-[rgba(216,185,138,0.25)]">
-                                <Code2Icon className="size-4 text-[var(--gold)]" />
+                    <div className="rounded-2xl border border-[rgba(216,185,138,0.2)] bg-[rgba(216,185,138,0.06)] p-5">
+                        <div className="mb-4 flex items-center gap-3">
+                            <span className="grid size-9 place-items-center rounded-full border border-[rgba(216,185,138,0.25)]">
+                                <SparklesIcon className="size-4 text-[var(--gold)]" strokeWidth={1.5} />
                             </span>
-                            <div className="text-sm">
-                                <p className="eyebrow mb-2 !tracking-[0.16em]">Room summary</p>
-                                <p className="text-[#d9d5cd]">
-                                    Problem <span className="text-[var(--gold-bright)]">{roomConfig.problem}</span>
-                                </p>
-                                <p className="mt-1 text-[#8d919b]">1-on-1 session · up to 2 participants</p>
-                            </div>
+                            <span className="eyebrow">What happens next</span>
                         </div>
-                    )}
+                        <ul className="space-y-2.5 text-sm text-[#b6b3ac]">
+                            <li>· Your private room is created instantly</li>
+                            <li>· Only you can see and choose the problem</li>
+                            <li>· Share the room so a partner can join the live call</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div className="relative flex items-center justify-end gap-3 border-t border-[var(--line)] px-7 py-5">
@@ -81,7 +47,7 @@ function CreateSessionModal({
                     <button
                         className="btn btn-primary gap-2 px-7 text-sm"
                         onClick={onCreateRoom}
-                        disabled={isCreating || !roomConfig.problem}
+                        disabled={isCreating}
                     >
                         {isCreating ? (
                             <LoaderIcon className="size-4 animate-spin" />

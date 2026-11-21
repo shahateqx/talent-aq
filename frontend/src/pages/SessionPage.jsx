@@ -1,19 +1,133 @@
 import { useUser } from "@clerk/clerk-react";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessions";
+import {
+    useEndSession,
+    useJoinSession,
+    useSessionById,
+    useSetSessionProblem,
+} from "../hooks/useSessions";
 import { PROBLEMS } from "../data/problems";
 import { executeCode } from "../lib/piston";
 import Navbar from "../components/Navbar";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getDifficultyBadgeClass } from "../lib/utils";
-import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
+import {
+    CheckIcon,
+    ChevronRightIcon,
+    ClockIcon,
+    Loader2Icon,
+    LogOutIcon,
+    PhoneOffIcon,
+} from "lucide-react";
 import CodeEditorPanel from "../components/CodeEditorPanel";
 import OutputPanel from "../components/OutputPanel";
 
 import useStreamClient from "../hooks/useStreamClient";
 import { StreamCall, StreamVideo } from "@stream-io/video-react-sdk";
 import VideoCallUI from "../components/VideoCallUI";
+
+function HostProblemPicker({ problems, selectedProblemId, onSelect, onConfirm, onCancel, isPending, hasProblem }) {
+    const selected = problems.find((p) => p.id === selectedProblemId) || problems[0];
+
+    return (
+        <div className="relative h-full overflow-y-auto bg-[#0c0f15] p-6 lg:p-8">
+            <div className="glow-orb -left-24 -top-24 size-72 bg-[rgba(163,126,72,0.12)]" />
+            <div className="relative mx-auto w-full max-w-lg animate-rise">
+                <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(216,185,138,0.25)] bg-[rgba(216,185,138,0.07)] px-4 py-2">
+                    <span className="size-1.5 rounded-full bg-[var(--gold)]" />
+                    <span className="eyebrow !text-[10px]">Host controls</span>
+                </span>
+
+                <h2 className="display-serif mt-5 text-4xl text-[#f3efe6]">
+                    {hasProblem ? "Change the problem" : "Choose a problem"}
+                </h2>
+                <p className="mt-3 max-w-md text-sm leading-relaxed text-[#8d919b]">
+                    Only you can see this panel. Your partner will see the problem as soon as you
+                    confirm it.
+                </p>
+
+                <div className="surface mt-8 p-6">
+                    <label className="eyebrow !tracking-[0.16em] !text-[#888d97]">Problem set</label>
+                    <select
+                        className="select mt-3 w-full !rounded-xl"
+                        value={selectedProblemId}
+                        onChange={(e) => onSelect(e.target.value)}
+                    >
+                        {problems.map((problem) => (
+                            <option key={problem.id} value={problem.id}>
+                                {problem.title} — {problem.difficulty}
+                            </option>
+                        ))}
+                    </select>
+
+                    {selected && (
+                        <div className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-[var(--line)] bg-white/[0.02] p-4">
+                            <div className="min-w-0">
+                                <p className="truncate text-sm font-semibold text-[#f0ece3]">
+                                    {selected.title}
+                                </p>
+                                <p className="mt-1 text-xs text-[#8d919b]">{selected.category}</p>
+                            </div>
+                            <span className={`badge shrink-0 ${getDifficultyBadgeClass(selected.difficulty)}`}>
+                                {selected.difficulty}
+                            </span>
+                        </div>
+                    )}
+
+                    <div className="mt-6 flex gap-3">
+                        {hasProblem && (
+                            <button
+                                className="btn btn-ghost flex-1 text-sm text-[#9a9da6]"
+                                onClick={onCancel}
+                                disabled={isPending}
+                            >
+                                Cancel
+                            </button>
+                        )}
+                        <button
+                            className="btn btn-primary flex-1 gap-2"
+                            onClick={onConfirm}
+                            disabled={isPending || !selected}
+                        >
+                            {isPending ? (
+                                <Loader2Icon className="size-4 animate-spin" />
+                            ) : (
+                                <CheckIcon className="size-4" strokeWidth={2.2} />
+                            )}
+                            {hasProblem ? "Update problem" : "Set problem"}
+                        </button>
+                    </div>
+                </div>
+
+                <p className="mt-5 text-center text-xs text-[#6f747e]">
+                    {problems.length} curated problems available
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function WaitingForProblem() {
+    return (
+        <div className="grid h-full place-items-center bg-[#0c0f15] p-8 text-center">
+            <div>
+                <span className="mx-auto mb-6 grid size-20 place-items-center rounded-full border border-[var(--line)] bg-white/[0.02]">
+                    <ClockIcon className="size-8 text-[var(--gold-dim)]" strokeWidth={1.3} />
+                </span>
+                <span className="eyebrow">Almost ready</span>
+                <h2 className="display-serif mt-3 text-3xl text-[#f3efe6]">Waiting for the host</h2>
+                <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-[#8d919b]">
+                    The host is choosing a problem. It will appear here as soon as they confirm it.
+                </p>
+                <div className="mt-6 flex items-center justify-center gap-2 text-xs text-[#6f747e]">
+                    <span className="pulse-dot size-1.5 rounded-full bg-[var(--gold)]" />
+                    Watching for updates…
+                </div>
+            </div>
+        </div>
+    );
+}
 
 function SessionPage() {
     const navigate = useNavigate();
@@ -42,6 +156,31 @@ function SessionPage() {
     const problemData = session?.problem
         ? Object.values(PROBLEMS).find((p) => p.title === session.problem)
         : null;
+    const problems = Object.values(PROBLEMS);
+
+    const [selectedProblemId, setSelectedProblemId] = useState(
+        problemData?.id || problems[0]?.id
+    );
+    const [isEditingProblem, setIsEditingProblem] = useState(false);
+    const setProblemMutation = useSetSessionProblem(id);
+
+    // keep the picker in sync when the host changes the problem
+    useEffect(() => {
+        if (problemData?.id) setSelectedProblemId(problemData.id);
+    }, [problemData?.id]);
+
+    const handleSetProblem = () => {
+        const problem = problems.find((p) => p.id === selectedProblemId);
+        if (!problem) return;
+
+        setProblemMutation.mutate(
+            {
+                problem: problem.title,
+                difficulty: problem.difficulty.toLowerCase(),
+            },
+            { onSuccess: () => setIsEditingProblem(false) }
+        );
+    };
 
     const [selectedLanguage, setSelectedLanguage] = useState("javascript");
     const [code, setCode] = useState(problemData?.starterCode?.[selectedLanguage] || "");
@@ -106,6 +245,19 @@ function SessionPage() {
                         <PanelGroup direction="vertical">
                             {/* PROBLEM DSC PANEL */}
                             <Panel defaultSize={50} minSize={20}>
+                                {isHost && (!session?.problem || isEditingProblem) ? (
+                                    <HostProblemPicker
+                                        problems={problems}
+                                        selectedProblemId={selectedProblemId}
+                                        onSelect={setSelectedProblemId}
+                                        onConfirm={handleSetProblem}
+                                        onCancel={() => setIsEditingProblem(false)}
+                                        isPending={setProblemMutation.isPending}
+                                        hasProblem={!!session?.problem}
+                                    />
+                                ) : !session?.problem ? (
+                                    <WaitingForProblem />
+                                ) : (
                                 <div className="h-full overflow-y-auto bg-[#0c0f15]">
                                     {/* HEADER SECTION */}
                                     <div className="border-b border-[var(--line)] bg-[#0e1118] px-6 py-6">
@@ -130,14 +282,25 @@ function SessionPage() {
                                             </div>
 
                                             <div className="flex items-center gap-3">
-                                                <span
-                                                    className={`badge ${getDifficultyBadgeClass(
-                                                        session?.difficulty
-                                                    )}`}
-                                                >
-                                                    {session?.difficulty.slice(0, 1).toUpperCase() +
-                                                        session?.difficulty.slice(1) || "Easy"}
-                                                </span>
+                                                {session?.difficulty && (
+                                                    <span
+                                                        className={`badge ${getDifficultyBadgeClass(
+                                                            session.difficulty
+                                                        )}`}
+                                                    >
+                                                        {session.difficulty.slice(0, 1).toUpperCase() +
+                                                            session.difficulty.slice(1)}
+                                                    </span>
+                                                )}
+                                                {isHost && session?.problem && (
+                                                    <button
+                                                        onClick={() => setIsEditingProblem(true)}
+                                                        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#b9b6af] transition-colors hover:border-[var(--gold-dim)] hover:text-[var(--gold-bright)]"
+                                                    >
+                                                        Change
+                                                        <ChevronRightIcon className="size-3.5" />
+                                                    </button>
+                                                )}
                                                 {isHost && session?.status === "active" && (
                                                     <button
                                                         onClick={handleEndSession}
@@ -231,6 +394,7 @@ function SessionPage() {
                                         )}
                                     </div>
                                 </div>
+                                )}
                             </Panel>
 
                             <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />

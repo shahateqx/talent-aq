@@ -1,6 +1,6 @@
 import { TrophyIcon, UsersIcon } from "lucide-react";
 
-function StatCard({ icon: Icon, value, label, accent, live }) {
+function StatCard({ icon, value, label, accent, live }) {
     return (
         <div className="surface surface-hover relative overflow-hidden p-6">
             <div
@@ -9,7 +9,7 @@ function StatCard({ icon: Icon, value, label, accent, live }) {
             />
             <div className="mb-6 flex items-start justify-between">
                 <span className="grid size-12 place-items-center rounded-full border border-[var(--line)] bg-white/[0.03]">
-                    <Icon className="size-5 text-[var(--gold)]" strokeWidth={1.5} />
+                    {icon}
                 </span>
                 {live && (
                     <span className="flex items-center gap-2 rounded-full border border-[rgba(140,197,162,0.2)] bg-[rgba(140,197,162,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#a5dcb9]">
@@ -27,8 +27,19 @@ function StatCard({ icon: Icon, value, label, accent, live }) {
 function StatsCards({ activeSessionsCount, recentSessionsCount }) {
     return (
         <div className="grid gap-5 lg:col-span-1">
-            <StatCard icon={UsersIcon} value={activeSessionsCount} label="Active sessions" accent="60" live />
-            <StatCard icon={TrophyIcon} value={recentSessionsCount} label="Total sessions" accent="40" />
+            <StatCard
+                icon={<UsersIcon className="size-5 text-[var(--gold)]" strokeWidth={1.5} />}
+                value={activeSessionsCount}
+                label="Active sessions"
+                accent={0.6}
+                live
+            />
+            <StatCard
+                icon={<TrophyIcon className="size-5 text-[var(--gold)]" strokeWidth={1.5} />}
+                value={recentSessionsCount}
+                label="Total sessions"
+                accent={0.4}
+            />
         </div>
     );
 }
