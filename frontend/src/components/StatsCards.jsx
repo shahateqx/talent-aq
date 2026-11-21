@@ -1,44 +1,34 @@
-import { TrophyIcon, UsersIcon } from "lucide-react";
-
-function StatCard({ icon, value, label, accent, live }) {
+function StatCard({ label, value, tag, dot, accent }) {
     return (
-        <div className="surface surface-hover relative overflow-hidden p-6">
-            <div
-                className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent to-[var(--gold)]"
-                style={{ opacity: accent }}
-            />
-            <div className="mb-6 flex items-start justify-between">
-                <span className="grid size-12 place-items-center rounded-full border border-[var(--line)] bg-white/[0.03]">
-                    {icon}
-                </span>
-                {live && (
-                    <span className="flex items-center gap-2 rounded-full border border-[rgba(140,197,162,0.2)] bg-[rgba(140,197,162,0.08)] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-[#a5dcb9]">
-                        <span className="pulse-dot size-1.5 rounded-full bg-[#8cc5a2]" />
-                        Live
-                    </span>
-                )}
+        <div className="panel panel-hover flex min-h-[190px] flex-col justify-between p-6">
+            <div className="flex items-start justify-between">
+                <span className="micro">{label}</span>
+                <i className={`dot ${dot}`} />
             </div>
-            <div className="display-serif text-5xl text-[#f3efe6]">{value}</div>
-            <div className="eyebrow mt-2 !tracking-[0.16em] !text-[#858a94]">{label}</div>
+            <div className="pixel text-[58px] leading-none" style={{ color: accent }}>
+                {String(value).padStart(2, "0")}
+            </div>
+            <span className="tag w-fit">{tag}</span>
         </div>
     );
 }
 
 function StatsCards({ activeSessionsCount, recentSessionsCount }) {
     return (
-        <div className="grid gap-5 lg:col-span-1">
+        <div className="grid gap-4 lg:col-span-1">
             <StatCard
-                icon={<UsersIcon className="size-5 text-[var(--gold)]" strokeWidth={1.5} />}
+                label="Live rooms"
                 value={activeSessionsCount}
-                label="Active sessions"
-                accent={0.6}
-                live
+                tag="Open now"
+                dot="dot-green"
+                accent="var(--lime)"
             />
             <StatCard
-                icon={<TrophyIcon className="size-5 text-[var(--gold)]" strokeWidth={1.5} />}
-                value={recentSessionsCount}
                 label="Total sessions"
-                accent={0.4}
+                value={recentSessionsCount}
+                tag="Archived"
+                dot="dot-cyan"
+                accent="var(--text)"
             />
         </div>
     );

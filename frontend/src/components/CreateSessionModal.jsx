@@ -1,4 +1,4 @@
-import { LoaderIcon, PlusIcon, SparklesIcon, XIcon } from "lucide-react";
+import { LoaderIcon, PlusIcon, XIcon } from "lucide-react";
 
 function CreateSessionModal({ isOpen, onClose, onCreateRoom, isCreating }) {
     if (!isOpen) return null;
@@ -6,49 +6,39 @@ function CreateSessionModal({ isOpen, onClose, onCreateRoom, isCreating }) {
     return (
         <div className="modal modal-open">
             <div className="modal-box relative max-w-lg !p-0">
-                <div className="glow-orb -right-20 -top-24 size-64 bg-[rgba(163,126,72,0.14)]" />
-
-                <div className="relative border-b border-[var(--line)] px-7 py-6">
+                <div className="flex items-start justify-between border-b border-[var(--line)] px-6 py-5">
+                    <div>
+                        <div className="micro mb-2">New room / 001</div>
+                        <h3 className="pixel text-[32px] text-[var(--text)]">Create a session</h3>
+                    </div>
                     <button
                         onClick={onClose}
-                        className="absolute right-5 top-5 grid size-8 place-items-center rounded-full border border-[var(--line)] text-[#8d919b] transition-colors hover:border-[var(--line-strong)] hover:text-[#e9e6df]"
+                        className="grid size-8 place-items-center border border-[var(--line)] text-[var(--muted)] transition-colors hover:text-[var(--lime)]"
                         aria-label="Close"
                     >
                         <XIcon className="size-4" />
                     </button>
-                    <span className="eyebrow">New room</span>
-                    <h3 className="display-serif mt-2 text-3xl text-[#f3efe6]">Create a session</h3>
-                    <p className="mt-1.5 text-sm leading-relaxed text-[#8d919b]">
-                        Set up the room first. As the host, you'll choose the coding problem once
-                        you're inside.
-                    </p>
                 </div>
 
-                <div className="relative px-7 py-7">
-                    <div className="rounded-2xl border border-[rgba(216,185,138,0.2)] bg-[rgba(216,185,138,0.06)] p-5">
-                        <div className="mb-4 flex items-center gap-3">
-                            <span className="grid size-9 place-items-center rounded-full border border-[rgba(216,185,138,0.25)]">
-                                <SparklesIcon className="size-4 text-[var(--gold)]" strokeWidth={1.5} />
-                            </span>
-                            <span className="eyebrow">What happens next</span>
-                        </div>
-                        <ul className="space-y-2.5 text-sm text-[#b6b3ac]">
-                            <li>· Your private room is created instantly</li>
-                            <li>· Only you can see and choose the problem</li>
-                            <li>· Share the room so a partner can join the live call</li>
+                <div className="px-6 py-6">
+                    <p className="text-[13px] leading-relaxed text-[#9ba0a7]">
+                        Your room is created instantly. As the host, you choose the coding problem
+                        once you're inside — your partner sees it after you confirm.
+                    </p>
+
+                    <div className="mt-6 border border-[var(--line)] bg-[#0b0c0e] p-5">
+                        <div className="micro mb-4 text-[var(--lime)]">What happens next</div>
+                        <ul className="space-y-2.5 font-mono text-[11px] leading-relaxed text-[#b7bbc1]">
+                            <li>› Private room with live video and chat</li>
+                            <li>› Host-only problem picker</li>
+                            <li>› Judge0 execution in three languages</li>
                         </ul>
                     </div>
                 </div>
 
-                <div className="relative flex items-center justify-end gap-3 border-t border-[var(--line)] px-7 py-5">
-                    <button className="btn btn-ghost rounded-full px-6 text-sm text-[#9a9da6]" onClick={onClose}>
-                        Cancel
-                    </button>
-                    <button
-                        className="btn btn-primary gap-2 px-7 text-sm"
-                        onClick={onCreateRoom}
-                        disabled={isCreating}
-                    >
+                <div className="flex items-center justify-end gap-3 border-t border-[var(--line)] px-6 py-5">
+                    <button className="btn-void" onClick={onClose}>Cancel</button>
+                    <button className="btn-cyan" onClick={onCreateRoom} disabled={isCreating}>
                         {isCreating ? (
                             <LoaderIcon className="size-4 animate-spin" />
                         ) : (

@@ -2,39 +2,35 @@ import Editor from "@monaco-editor/react";
 import { Loader2Icon, PlayIcon } from "lucide-react";
 import { LANGUAGE_CONFIG } from "../data/problems";
 
-function defineNoirTheme(monaco) {
-    monaco.editor.defineTheme("talent-noir", {
+function defineStudioTheme(monaco) {
+    monaco.editor.defineTheme("talent-override", {
         base: "vs-dark",
         inherit: true,
         rules: [
-            { token: "", foreground: "D9D5CC", background: "0E1117" },
-            { token: "comment", foreground: "6E7580", fontStyle: "italic" },
-            { token: "keyword", foreground: "D8B98A" },
-            { token: "string", foreground: "9FC9B0" },
-            { token: "number", foreground: "C4A9D6" },
-            { token: "delimiter", foreground: "8A909B" },
-            { token: "type", foreground: "8FB6C9" },
-            { token: "identifier", foreground: "D9D5CC" },
+            { token: "", foreground: "E4E6E8", background: "0C0E11" },
+            { token: "comment", foreground: "5D6269", fontStyle: "italic" },
+            { token: "keyword", foreground: "E8FF3A" },
+            { token: "string", foreground: "22D3EE" },
+            { token: "number", foreground: "FF6B9F" },
+            { token: "delimiter", foreground: "8B9097" },
+            { token: "type", foreground: "7EE7F8" },
+            { token: "identifier", foreground: "E4E6E8" },
         ],
         colors: {
-            "editor.background": "#0E1117",
-            "editor.foreground": "#D9D5CC",
-            "editorLineNumber.foreground": "#454B55",
-            "editorLineNumber.activeForeground": "#D8B98A",
-            "editor.selectionBackground": "#D8B98A33",
-            "editor.lineHighlightBackground": "#FFFFFF07",
-            "editorCursor.foreground": "#D8B98A",
+            "editor.background": "#0C0E11",
+            "editor.foreground": "#E4E6E8",
+            "editorLineNumber.foreground": "#3D4249",
+            "editorLineNumber.activeForeground": "#E8FF3A",
+            "editor.selectionBackground": "#E8FF3A33",
+            "editor.lineHighlightBackground": "#FFFFFF08",
+            "editorCursor.foreground": "#E8FF3A",
             "editorIndentGuide.background1": "#FFFFFF0D",
-            "editorIndentGuide.activeBackground1": "#D8B98A33",
-            "editorGutter.background": "#0E1117",
-            "editorWhitespace.foreground": "#FFFFFF12",
+            "editorGutter.background": "#0C0E11",
             "scrollbarSlider.background": "#FFFFFF14",
             "scrollbarSlider.hoverBackground": "#FFFFFF26",
-            "scrollbarSlider.activeBackground": "#D8B98A44",
-            "editorOverviewRuler.border": "#00000000",
         },
     });
-    monaco.editor.setTheme("talent-noir");
+    monaco.editor.setTheme("talent-override");
 }
 
 function CodeEditorPanel({
@@ -48,43 +44,38 @@ function CodeEditorPanel({
     const language = LANGUAGE_CONFIG[selectedLanguage];
 
     return (
-        <div className="flex h-full flex-col bg-[#0e1117]">
-            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[#0e1118] px-4 py-2.5">
+        <div className="flex h-full flex-col bg-[#0c0e11]">
+            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[#0e1013] px-4 py-2.5">
                 <div className="flex items-center gap-3">
                     <img src={language.icon} alt={language.name} className="size-5 opacity-90" />
                     <select
-                        className="select select-sm !rounded-lg !bg-transparent !border-transparent !pl-1 text-[13px] font-medium text-[#d7d4cc] hover:!border-[var(--line)]"
+                        className="select !min-h-8 !border-transparent !bg-transparent !px-1 !text-[11px] uppercase tracking-[0.1em] hover:!border-[var(--line)]"
                         value={selectedLanguage}
                         onChange={onLanguageChange}
                     >
                         {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
-                            <option key={key} value={key} className="bg-[#11151d]">
+                            <option key={key} value={key} className="bg-[#111316]">
                                 {lang.name}
                             </option>
                         ))}
                     </select>
-                    <span className="hidden h-4 w-px bg-[var(--line)] sm:block" />
-                    <span className="hidden font-mono text-[11px] text-[#626772] sm:block">
+                    <span className="h-4 w-px bg-[var(--line)]" />
+                    <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#5d6269]">
                         main.{selectedLanguage === "python" ? "py" : selectedLanguage === "java" ? "java" : "js"}
                     </span>
                 </div>
 
                 <button
-                    className="btn btn-primary btn-sm gap-2 !px-5 !text-xs"
+                    className="btn btn-primary gap-2 !px-4 !py-2"
                     disabled={isRunning}
                     onClick={onRunCode}
                 >
                     {isRunning ? (
-                        <>
-                            <Loader2Icon className="size-3.5 animate-spin" />
-                            Running…
-                        </>
+                        <Loader2Icon className="size-3.5 animate-spin" />
                     ) : (
-                        <>
-                            <PlayIcon className="size-3.5" fill="currentColor" />
-                            Run code
-                        </>
+                        <PlayIcon className="size-3.5" fill="currentColor" />
                     )}
+                    {isRunning ? "Running…" : "Run code"}
                 </button>
             </div>
 
@@ -94,12 +85,11 @@ function CodeEditorPanel({
                     language={language.monacoLang}
                     value={code}
                     onChange={onCodeChange}
-                    theme="talent-noir"
-                    beforeMount={defineNoirTheme}
+                    theme="talent-override"
+                    beforeMount={defineStudioTheme}
                     options={{
                         fontSize: 14,
-                        fontFamily: "'DM Sans', ui-monospace, monospace",
-                        fontLigatures: true,
+                        fontFamily: "'Space Mono', monospace",
                         lineNumbers: "on",
                         scrollBeyondLastLine: false,
                         automaticLayout: true,
@@ -108,9 +98,7 @@ function CodeEditorPanel({
                         renderLineHighlight: "line",
                         smoothScrolling: true,
                         cursorBlinking: "smooth",
-                        cursorSmoothCaretAnimation: "on",
                         bracketPairColorization: { enabled: true },
-                        guides: { indentation: true, bracketPairs: false },
                         scrollbar: { verticalScrollbarSize: 8, horizontalScrollbarSize: 8 },
                         tabSize: 4,
                     }}

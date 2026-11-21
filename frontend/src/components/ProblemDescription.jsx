@@ -2,8 +2,8 @@ import { getDifficultyBadgeClass } from "../lib/utils";
 
 function Section({ label, children }) {
     return (
-        <section className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
-            <h2 className="eyebrow mb-4 !tracking-[0.18em]">{label}</h2>
+        <section className="border border-[var(--line)] bg-[#0f1114] p-5">
+            <div className="micro mb-4 text-[var(--lime)]">{label}</div>
             {children}
         </section>
     );
@@ -11,20 +11,20 @@ function Section({ label, children }) {
 
 function ProblemDescription({ problem, currentProblemId, onProblemChange, allProblems }) {
     return (
-        <div className="h-full overflow-y-auto bg-[#0c0f15]">
-            <div className="border-b border-[var(--line)] bg-[#0e1118] px-6 py-6">
+        <div className="h-full overflow-y-auto bg-[#0b0c0e]">
+            <div className="border-b border-[var(--line)] bg-[#0e1013] px-6 py-6">
                 <div className="mb-3 flex items-start justify-between gap-4">
-                    <h1 className="display-serif text-[34px] leading-tight text-[#f3efe6]">
+                    <h1 className="pixel text-[32px] leading-none text-[var(--text)]">
                         {problem.title}
                     </h1>
-                    <span className={`badge mt-1 ${getDifficultyBadgeClass(problem.difficulty)}`}>
+                    <span className={`badge ${getDifficultyBadgeClass(problem.difficulty)}`}>
                         {problem.difficulty}
                     </span>
                 </div>
-                <p className="text-xs uppercase tracking-[0.16em] text-[#7f838d]">{problem.category}</p>
+                <div className="micro">{problem.category}</div>
 
                 <select
-                    className="select select-sm mt-5 w-full !rounded-xl"
+                    className="select mt-5 w-full"
                     value={currentProblemId}
                     onChange={(e) => onProblemChange(e.target.value)}
                 >
@@ -36,9 +36,9 @@ function ProblemDescription({ problem, currentProblemId, onProblemChange, allPro
                 </select>
             </div>
 
-            <div className="space-y-5 p-6">
+            <div className="space-y-4 p-6">
                 <Section label="Description">
-                    <div className="space-y-3 text-[14px] leading-[1.8] text-[#b6b3ac]">
+                    <div className="space-y-3 text-[13px] leading-[1.8] text-[#b7bbc1]">
                         <p>{problem.description.text}</p>
                         {problem.description.notes.map((note, idx) => (
                             <p key={idx}>{note}</p>
@@ -51,25 +51,25 @@ function ProblemDescription({ problem, currentProblemId, onProblemChange, allPro
                         {problem.examples.map((example, idx) => (
                             <div key={idx}>
                                 <div className="mb-2.5 flex items-center gap-2.5">
-                                    <span className="grid size-6 place-items-center rounded-full border border-[var(--line-strong)] font-mono text-[10px] text-[var(--gold)]">
-                                        {idx + 1}
+                                    <span className="grid size-6 place-items-center border border-[var(--line)] font-mono text-[10px] text-[var(--lime)]">
+                                        {String(idx + 1).padStart(2, "0")}
                                     </span>
-                                    <span className="text-[13px] font-medium text-[#d7d4cc]">
+                                    <span className="font-mono text-[11px] uppercase tracking-[0.1em] text-[#d8dade]">
                                         Example {idx + 1}
                                     </span>
                                 </div>
-                                <div className="space-y-2 rounded-xl border border-[var(--line)] bg-[#080a0f]/70 p-4 font-mono text-[13px]">
+                                <div className="space-y-2 border border-[var(--line)] bg-[#08090b] p-4 font-mono text-[12px] leading-relaxed">
                                     <div className="flex gap-3">
-                                        <span className="min-w-[62px] text-[var(--gold)]">Input</span>
-                                        <span className="text-[#c9c6bf]">{example.input}</span>
+                                        <span className="min-w-[58px] text-[var(--lime)]">IN</span>
+                                        <span className="break-all text-[#b7bbc1]">{example.input}</span>
                                     </div>
                                     <div className="flex gap-3">
-                                        <span className="min-w-[62px] text-[#93ada6]">Output</span>
-                                        <span className="text-[#c9c6bf]">{example.output}</span>
+                                        <span className="min-w-[58px] text-[var(--cyan)]">OUT</span>
+                                        <span className="break-all text-[#b7bbc1]">{example.output}</span>
                                     </div>
                                     {example.explanation && (
-                                        <div className="mt-2 border-t border-[var(--line)] pt-2 font-sans text-xs leading-relaxed text-[#858a94]">
-                                            <span className="font-semibold text-[#b6b3ac]">Why: </span>
+                                        <div className="mt-2 border-t border-[var(--line)] pt-2 text-[11px] leading-relaxed text-[#7c8087]">
+                                            <span className="text-[#b7bbc1]">Why: </span>
                                             {example.explanation}
                                         </div>
                                     )}
@@ -82,9 +82,9 @@ function ProblemDescription({ problem, currentProblemId, onProblemChange, allPro
                 <Section label="Constraints">
                     <ul className="space-y-2.5">
                         {problem.constraints.map((constraint, idx) => (
-                            <li key={idx} className="flex gap-3 text-[13px] text-[#b6b3ac]">
-                                <span className="mt-1.5 size-1 shrink-0 rounded-full bg-[var(--gold)]" />
-                                <code className="font-mono">{constraint}</code>
+                            <li key={idx} className="flex gap-3 font-mono text-[12px] text-[#b7bbc1]">
+                                <span className="text-[var(--lime)]">›</span>
+                                <span>{constraint}</span>
                             </li>
                         ))}
                     </ul>

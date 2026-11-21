@@ -1,95 +1,101 @@
 import { Link } from "react-router";
-import Navbar from "../components/Navbar";
-
+import AppShell from "../components/AppShell";
 import { PROBLEMS } from "../data/problems";
-import { ChevronRightIcon, Code2Icon } from "lucide-react";
+import { ArrowUpRightIcon, Code2Icon } from "lucide-react";
 import { getDifficultyBadgeClass } from "../lib/utils";
 
 function ProblemsPage() {
     const problems = Object.values(PROBLEMS);
-
-    const easyProblemsCount = problems.filter((p) => p.difficulty === "Easy").length;
-    const mediumProblemsCount = problems.filter((p) => p.difficulty === "Medium").length;
-    const hardProblemsCount = problems.filter((p) => p.difficulty === "Hard").length;
+    const counts = {
+        Easy: problems.filter((p) => p.difficulty === "Easy").length,
+        Medium: problems.filter((p) => p.difficulty === "Medium").length,
+        Hard: problems.filter((p) => p.difficulty === "Hard").length,
+    };
 
     return (
-        <div className="min-h-screen">
-            <Navbar />
-
-            <div className="relative overflow-hidden">
-                <div className="glow-orb -top-52 left-[20%] size-[480px] bg-[rgba(163,126,72,0.12)]" />
-                <div className="relative mx-auto max-w-6xl px-5 pb-8 pt-14">
-                    <div className="animate-rise flex items-center gap-3">
-                        <span className="h-px w-8 bg-[var(--gold)]" />
-                        <span className="eyebrow">The library</span>
+        <AppShell>
+            <div className="space-y-4">
+                <section className="panel relative overflow-hidden p-7 sm:p-9">
+                    <div className="mb-6 flex flex-wrap items-center gap-2">
+                        <span className="tag tag-lime">Library / 010</span>
+                        <span className="tag">Curated</span>
                     </div>
-                    <h1 className="display-serif animate-rise mt-4 text-5xl text-[#f3efe6] sm:text-6xl">
-                        Practice <span className="italic text-[var(--gold-bright)]">problems</span>
+                    <h1 className="pixel text-[46px] text-[var(--text)] sm:text-[62px]">
+                        Problem <span className="text-[var(--lime)]">library.</span>
                     </h1>
-                    <p className="animate-rise mt-4 max-w-2xl text-[15px] leading-relaxed text-[#9296a0]">
-                        A curated set of challenges. Work them alone for craft, or open a room and
-                        solve them with someone who sees the problem differently.
+                    <p className="mt-4 max-w-2xl text-[13px] leading-relaxed text-[#8b9097]">
+                        Ten hand-picked challenges across strings, arrays, hash maps and dynamic
+                        programming. Solve them solo, or open a room and work them out loud.
                     </p>
-                </div>
-            </div>
+                </section>
 
-            <div className="mx-auto max-w-6xl px-5 pb-16">
-                <div className="space-y-3">
-                    {problems.map((problem, index) => (
-                        <Link
-                            key={problem.id}
-                            to={`/problem/${problem.id}`}
-                            className="group surface surface-hover flex items-center gap-5 p-5 sm:p-6"
-                        >
-                            <span className="hidden w-8 shrink-0 font-mono text-xs text-[#60656f] sm:block">
-                                {String(index + 1).padStart(2, "0")}
-                            </span>
-                            <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-white/[0.025] transition-colors duration-300 group-hover:border-[rgba(216,185,138,0.3)]">
-                                <Code2Icon
-                                    className="size-5 text-[var(--gold-dim)] transition-colors duration-300 group-hover:text-[var(--gold-bright)]"
-                                    strokeWidth={1.5}
-                                />
-                            </span>
+                <section className="panel overflow-hidden">
+                    <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-4">
+                        <span className="micro micro-bright">All problems</span>
+                        <span className="micro">Sort: index ↑</span>
+                    </div>
 
-                            <div className="min-w-0 flex-1">
-                                <div className="mb-1.5 flex flex-wrap items-center gap-3">
-                                    <h2 className="text-[17px] font-semibold text-[#f0ece3] transition-colors group-hover:text-[var(--gold-bright)]">
+                    <div>
+                        {problems.map((problem, index) => (
+                            <Link
+                                key={problem.id}
+                                to={`/problem/${problem.id}`}
+                                className="group grid grid-cols-[36px_40px_1fr_auto] items-center gap-3 border-b border-[var(--line)] px-5 py-5 transition-colors last:border-b-0 hover:bg-[#14171a] sm:grid-cols-[48px_44px_1fr_180px_auto]"
+                            >
+                                <span className="font-mono text-[10px] text-[#5d6269]">
+                                    C {String(index + 1).padStart(3, "0")}
+                                </span>
+                                <span className="grid size-9 place-items-center border border-[var(--line)] bg-[#15171a]">
+                                    <Code2Icon
+                                        className="size-4 text-[#7c8087] transition-colors group-hover:text-[var(--lime)]"
+                                        strokeWidth={1.6}
+                                    />
+                                </span>
+                                <div className="min-w-0">
+                                    <h2 className="truncate text-sm font-semibold text-[var(--text)] transition-colors group-hover:text-[var(--lime)]">
                                         {problem.title}
                                     </h2>
+                                    <p className="micro mt-1 truncate">{problem.category}</p>
+                                    <p className="mt-2 line-clamp-1 max-w-2xl text-[12px] text-[#8b9097]">
+                                        {problem.description.text}
+                                    </p>
+                                </div>
+                                <div className="hidden sm:flex sm:items-center sm:gap-2">
                                     <span className={`badge ${getDifficultyBadgeClass(problem.difficulty)}`}>
                                         {problem.difficulty}
                                     </span>
-                                    <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-[#6f747e]">
-                                        {problem.category}
-                                    </span>
                                 </div>
-                                <p className="line-clamp-2 max-w-3xl text-sm leading-relaxed text-[#8d919b]">
-                                    {problem.description.text}
-                                </p>
-                            </div>
+                                <ArrowUpRightIcon className="size-4 text-[#5d6269] transition-colors group-hover:text-[var(--lime)]" />
+                            </Link>
+                        ))}
+                    </div>
 
-                            <span className="grid size-10 shrink-0 place-items-center rounded-full border border-[var(--line)] text-[var(--gold-dim)] transition-all duration-300 group-hover:border-[var(--gold)] group-hover:bg-[rgba(216,185,138,0.1)] group-hover:text-[var(--gold-bright)]">
-                                <ChevronRightIcon className="size-4 transition-transform group-hover:translate-x-0.5" />
-                            </span>
-                        </Link>
-                    ))}
-                </div>
+                    <div className="panel-bar">
+                        <span>END OF LIST</span>
+                        <span>{String(problems.length).padStart(3, "0")} ENTRIES</span>
+                    </div>
+                </section>
 
-                <div className="surface mt-10 grid grid-cols-2 divide-x divide-[var(--line)] sm:grid-cols-4">
+                <section className="panel grid grid-cols-2 divide-x divide-[var(--line)] sm:grid-cols-4">
                     {[
-                        { label: "Total problems", value: problems.length, tone: "text-[#f3efe6]" },
-                        { label: "Easy", value: easyProblemsCount, tone: "text-[#a5dcb9]" },
-                        { label: "Medium", value: mediumProblemsCount, tone: "text-[#e6c98f]" },
-                        { label: "Hard", value: hardProblemsCount, tone: "text-[#e6a49f]" },
+                        { label: "Total", value: problems.length, dot: "dot-cyan" },
+                        { label: "Easy", value: counts.Easy, dot: "dot-green" },
+                        { label: "Medium", value: counts.Medium, dot: "dot-yellow" },
+                        { label: "Hard", value: counts.Hard, dot: "dot-pink" },
                     ].map((stat) => (
-                        <div key={stat.label} className="px-6 py-6 text-center">
-                            <div className={`display-serif text-4xl ${stat.tone}`}>{stat.value}</div>
-                            <div className="eyebrow mt-2 !tracking-[0.14em] !text-[#7f838d]">{stat.label}</div>
+                        <div key={stat.label} className="flex items-center justify-between p-6">
+                            <div>
+                                <div className="pixel text-[34px] text-[var(--text)]">
+                                    {String(stat.value).padStart(2, "0")}
+                                </div>
+                                <div className="micro mt-1">{stat.label}</div>
+                            </div>
+                            <i className={`dot ${stat.dot}`} />
                         </div>
                     ))}
-                </div>
+                </section>
             </div>
-        </div>
+        </AppShell>
     );
 }
 export default ProblemsPage;

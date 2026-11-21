@@ -9,7 +9,7 @@ import {
 } from "../hooks/useSessions";
 import { PROBLEMS } from "../data/problems";
 import { executeCode } from "../lib/piston";
-import Navbar from "../components/Navbar";
+import AppShell from "../components/AppShell";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import { getDifficultyBadgeClass } from "../lib/utils";
 import {
@@ -33,13 +33,13 @@ function HostProblemPicker({ problems, selectedProblemId, onSelect, onConfirm, o
     return (
         <div className="relative h-full overflow-y-auto bg-[#0c0f15] p-6 lg:p-8">
             <div className="glow-orb -left-24 -top-24 size-72 bg-[rgba(163,126,72,0.12)]" />
-            <div className="relative mx-auto w-full max-w-lg animate-rise">
+            <div className="relative mx-auto w-full max-w-lg">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(216,185,138,0.25)] bg-[rgba(216,185,138,0.07)] px-4 py-2">
-                    <span className="size-1.5 rounded-full bg-[var(--gold)]" />
-                    <span className="eyebrow !text-[10px]">Host controls</span>
+                    <span className="size-1.5 rounded-full bg-[var(--lime)]" />
+                    <span className="micro !text-[10px]">Host controls</span>
                 </span>
 
-                <h2 className="display-serif mt-5 text-4xl text-[#f3efe6]">
+                <h2 className="pixel mt-5 text-4xl text-[#f3efe6]">
                     {hasProblem ? "Change the problem" : "Choose a problem"}
                 </h2>
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-[#8d919b]">
@@ -47,8 +47,8 @@ function HostProblemPicker({ problems, selectedProblemId, onSelect, onConfirm, o
                     confirm it.
                 </p>
 
-                <div className="surface mt-8 p-6">
-                    <label className="eyebrow !tracking-[0.16em] !text-[#888d97]">Problem set</label>
+                <div className="panel mt-8 p-6">
+                    <label className="micro !tracking-[0.16em] !text-[#888d97]">Problem set</label>
                     <select
                         className="select mt-3 w-full !rounded-xl"
                         value={selectedProblemId}
@@ -113,15 +113,15 @@ function WaitingForProblem() {
         <div className="grid h-full place-items-center bg-[#0c0f15] p-8 text-center">
             <div>
                 <span className="mx-auto mb-6 grid size-20 place-items-center rounded-full border border-[var(--line)] bg-white/[0.02]">
-                    <ClockIcon className="size-8 text-[var(--gold-dim)]" strokeWidth={1.3} />
+                    <ClockIcon className="size-8 text-[var(--cyan)]" strokeWidth={1.3} />
                 </span>
-                <span className="eyebrow">Almost ready</span>
-                <h2 className="display-serif mt-3 text-3xl text-[#f3efe6]">Waiting for the host</h2>
+                <span className="micro">Almost ready</span>
+                <h2 className="pixel mt-3 text-3xl text-[#f3efe6]">Waiting for the host</h2>
                 <p className="mx-auto mt-3 max-w-sm text-sm leading-relaxed text-[#8d919b]">
                     The host is choosing a problem. It will appear here as soon as they confirm it.
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-2 text-xs text-[#6f747e]">
-                    <span className="pulse-dot size-1.5 rounded-full bg-[var(--gold)]" />
+                    <span className="dot size-1.5 rounded-full bg-[var(--lime)]" />
                     Watching for updates…
                 </div>
             </div>
@@ -235,10 +235,8 @@ function SessionPage() {
     };
 
     return (
-        <div className="flex h-screen flex-col bg-[#0b0e14]">
-            <Navbar />
-
-            <div className="flex-1">
+        <AppShell flush>
+            <div className="h-full">
                 <PanelGroup direction="horizontal">
                     {/* LEFT PANEL - CODE EDITOR & PROBLEM DETAILS */}
                     <Panel defaultSize={50} minSize={30}>
@@ -263,8 +261,8 @@ function SessionPage() {
                                     <div className="border-b border-[var(--line)] bg-[#0e1118] px-6 py-6">
                                         <div className="mb-3 flex items-start justify-between gap-4">
                                             <div>
-                                                <span className="eyebrow">Problem brief</span>
-                                                <h1 className="display-serif mt-2 text-[34px] leading-tight text-[#f3efe6]">
+                                                <span className="micro">Problem brief</span>
+                                                <h1 className="pixel mt-2 text-[34px] leading-tight text-[#f3efe6]">
                                                     {session?.problem || "Loading..."}
                                                 </h1>
                                                 {problemData?.category && (
@@ -295,7 +293,7 @@ function SessionPage() {
                                                 {isHost && session?.problem && (
                                                     <button
                                                         onClick={() => setIsEditingProblem(true)}
-                                                        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#b9b6af] transition-colors hover:border-[var(--gold-dim)] hover:text-[var(--gold-bright)]"
+                                                        className="inline-flex items-center gap-1.5 rounded-full border border-[var(--line)] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-[#b9b6af] transition-colors hover:border-[var(--cyan)] hover:text-[var(--lime)]"
                                                     >
                                                         Change
                                                         <ChevronRightIcon className="size-3.5" />
@@ -326,7 +324,7 @@ function SessionPage() {
                                         {/* problem desc */}
                                         {problemData?.description && (
                                             <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
-                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Description</h2>
+                                                <h2 className="micro mb-4 !tracking-[0.18em]">Description</h2>
                                                 <div className="space-y-3 text-base leading-relaxed">
                                                     <p className="text-base-content/90">{problemData.description.text}</p>
                                                     {problemData.description.notes?.map((note, idx) => (
@@ -341,7 +339,7 @@ function SessionPage() {
                                         {/* examples section */}
                                         {problemData?.examples && problemData.examples.length > 0 && (
                                             <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
-                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Examples</h2>
+                                                <h2 className="micro mb-4 !tracking-[0.18em]">Examples</h2>
 
                                                 <div className="space-y-4">
                                                     {problemData.examples.map((example, idx) => (
@@ -352,7 +350,7 @@ function SessionPage() {
                                                             </div>
                                                             <div className="space-y-2 rounded-xl border border-[var(--line)] bg-[#080a0f]/70 p-4 font-mono text-[13px]">
                                                                 <div className="flex gap-2">
-                                                                    <span className="min-w-[62px] text-[var(--gold)]">
+                                                                    <span className="min-w-[62px] text-[var(--lime)]">
                                                                         Input
                                                                     </span>
                                                                     <span>{example.input}</span>
@@ -381,11 +379,11 @@ function SessionPage() {
                                         {/* Constraints */}
                                         {problemData?.constraints && problemData.constraints.length > 0 && (
                                             <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
-                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Constraints</h2>
+                                                <h2 className="micro mb-4 !tracking-[0.18em]">Constraints</h2>
                                                 <ul className="space-y-2 text-base-content/90">
                                                     {problemData.constraints.map((constraint, idx) => (
                                                         <li key={idx} className="flex gap-2">
-                                                            <span className="text-primary">•</span>
+                                                            <span className="text-[var(--lime)]">•</span>
                                                             <code className="text-sm">{constraint}</code>
                                                         </li>
                                                     ))}
@@ -397,7 +395,7 @@ function SessionPage() {
                                 )}
                             </Panel>
 
-                            <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />
+                            <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--cyan)] cursor-row-resize" />
 
                             <Panel defaultSize={50} minSize={20}>
                                 <PanelGroup direction="vertical">
@@ -412,7 +410,7 @@ function SessionPage() {
                                         />
                                     </Panel>
 
-                                    <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />
+                                    <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--cyan)] cursor-row-resize" />
 
                                     <Panel defaultSize={30} minSize={15}>
                                         <OutputPanel output={output} />
@@ -422,7 +420,7 @@ function SessionPage() {
                         </PanelGroup>
                     </Panel>
 
-                    <PanelResizeHandle className="w-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-col-resize" />
+                    <PanelResizeHandle className="w-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--cyan)] cursor-col-resize" />
 
                     {/* RIGHT PANEL - VIDEO CALLS & CHAT */}
                     <Panel defaultSize={50} minSize={30}>
@@ -430,17 +428,17 @@ function SessionPage() {
                             {isInitializingCall ? (
                                 <div className="h-full flex items-center justify-center">
                                     <div className="text-center">
-                                        <Loader2Icon className="mx-auto mb-4 size-10 animate-spin text-[var(--gold)]" strokeWidth={1.5} />
-                                        <p className="eyebrow">Connecting to video call</p>
+                                        <Loader2Icon className="mx-auto mb-4 size-10 animate-spin text-[var(--lime)]" strokeWidth={1.5} />
+                                        <p className="micro">Connecting to video call</p>
                                     </div>
                                 </div>
                             ) : !streamClient || !call ? (
                                 <div className="h-full flex items-center justify-center">
-                                    <div className="surface max-w-md p-8 text-center">
+                                    <div className="panel max-w-md p-8 text-center">
                                         <div className="mx-auto mb-5 grid size-20 place-items-center rounded-full border border-[rgba(217,142,136,0.25)] bg-[rgba(217,142,136,0.08)]">
                                             <PhoneOffIcon className="size-8 text-[#e6a49f]" strokeWidth={1.5} />
                                         </div>
-                                        <h2 className="display-serif text-3xl text-[#f3efe6]">Connection failed</h2>
+                                        <h2 className="pixel text-3xl text-[#f3efe6]">Connection failed</h2>
                                         <p className="mt-2 text-sm text-[#8d919b]">
                                             We couldn't connect to the video call. Try rejoining the session.
                                         </p>
@@ -459,7 +457,7 @@ function SessionPage() {
                     </Panel>
                 </PanelGroup>
             </div>
-        </div>
+        </AppShell>
     );
 }
 

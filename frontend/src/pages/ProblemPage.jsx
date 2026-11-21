@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { PROBLEMS } from "../data/problems";
-import Navbar from "../components/Navbar";
+import AppShell from "../components/AppShell";
 
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 import ProblemDescription from "../components/ProblemDescription";
@@ -107,12 +107,9 @@ function ProblemPage() {
     };
 
     return (
-        <div className="flex h-screen flex-col bg-[#0b0e14]">
-            <Navbar />
-
-            <div className="flex-1">
+        <AppShell flush>
+            <div className="h-full">
                 <PanelGroup direction="horizontal">
-                    {/* left panel- problem desc */}
                     <Panel defaultSize={40} minSize={30}>
                         <ProblemDescription
                             problem={currentProblem}
@@ -122,12 +119,10 @@ function ProblemPage() {
                         />
                     </Panel>
 
-                    <PanelResizeHandle className="w-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-col-resize" />
+                    <PanelResizeHandle className="w-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--cyan)] cursor-col-resize" />
 
-                    {/* right panel- code editor & output */}
                     <Panel defaultSize={60} minSize={30}>
                         <PanelGroup direction="vertical">
-                            {/* Top panel - Code editor */}
                             <Panel defaultSize={70} minSize={30}>
                                 <CodeEditorPanel
                                     selectedLanguage={selectedLanguage}
@@ -139,9 +134,7 @@ function ProblemPage() {
                                 />
                             </Panel>
 
-                            <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />
-
-                            {/* Bottom panel - Output Panel*/}
+                            <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--cyan)] cursor-row-resize" />
 
                             <Panel defaultSize={30} minSize={30}>
                                 <OutputPanel output={output} />
@@ -150,7 +143,7 @@ function ProblemPage() {
                     </Panel>
                 </PanelGroup>
             </div>
-        </div>
+        </AppShell>
     );
 }
 
