@@ -1,4 +1,5 @@
-import { Link, useLocation } from "react-router";
+import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router";
 import {
     ArrowUpRightIcon,
     BookOpenIcon,
@@ -8,6 +9,9 @@ import {
     SearchIcon,
 } from "lucide-react";
 import { SignInButton, SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
+import { useCreateSession } from "../hooks/useSessions";
+import CreateSessionModal from "./CreateSessionModal";
+import { SessionModalContext } from "../context/sessionModal";
 
 function BrandMark() {
     return (
@@ -30,8 +34,23 @@ function NavItem({ to, icon, label, active }) {
 
 function AppShell({ children, flush = false, topbarActions = null }) {
     const location = useLocation();
+    const navigate = useNavigate();
     const { isSignedIn, user } = useUser();
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const createSessionMutation = useCreateSession();
+
     const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
+
+    const openCreateSession = () => setShowCreateModal(true);
+
+    const handleCreateRoom = () => {
+        createSessionMutation.mutate(undefined, {
+            onSuccess: (data) => {
+                setShowCreateModal(false);
+                navigate(`/session/${data.session._id}`);
+            },
+        });
+    };
 
     return (
         <div className={`app-shell ${flush ? "shell-fixed" : ""}`}>
@@ -81,10 +100,10 @@ function AppShell({ children, flush = false, topbarActions = null }) {
                 <div className="sidebar-bottom">
                     {isSignedIn ? (
                         <>
-                            <Link to="/dashboard" className="btn-cyan">
+                            <button onClick={openCreateSession} className="btn-cyan">
                                 <PlusIcon className="size-4" strokeWidth={2.2} />
                                 <span>New session</span>
-                            </Link>
+                            </button>
                             <SignOutButton>
                                 <button className="btn-void w-full">
                                     <span>Sign out</span>
@@ -152,7 +171,18 @@ function AppShell({ children, flush = false, topbarActions = null }) {
                     </div>
                 </header>
 
-                <main className={`shell-content ${flush ? "flush" : ""}`}>{children}</main>
+                <main className={`shell-content ${flush ? "flush" : ""}`}>
+                    <SessionModalContext.Provider value={openCreateSession}>
+                        {children}
+                    </SessionModalContext.Provider>
+                </main>
+
+                <CreateSessionModal
+                    isOpen={showCreateModal}
+                    onClose={() => setShowCreateModal(false)}
+                    onCreateRoom={handleCreateRoom}
+                    isCreating={createSessionMutation.isPending}
+                />
             </div>
         </div>
     );
