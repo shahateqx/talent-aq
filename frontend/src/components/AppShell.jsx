@@ -38,10 +38,14 @@ function AppShell({ children, flush = false, topbarActions = null }) {
                     </span>
                 </Link>
 
-                <div className="nav-group-label">Workspace</div>
-                <NavItem to="/dashboard" icon={<LayoutGridIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Dashboard" active={isActive("/dashboard")} />
-                <NavItem to="/problems" icon={<BookOpenIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Problems" active={isActive("/problems") || isActive("/problem")} />
-                <NavItem to="/dashboard" icon={<RadioIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Live Rooms" active={isActive("/session")} />
+                {isSignedIn && (
+                    <>
+                        <div className="nav-group-label">Workspace</div>
+                        <NavItem to="/dashboard" icon={<LayoutGridIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Dashboard" active={isActive("/dashboard")} />
+                        <NavItem to="/problems" icon={<BookOpenIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Problems" active={isActive("/problems") || isActive("/problem")} />
+                        <NavItem to="/dashboard" icon={<RadioIcon className="size-4 shrink-0" strokeWidth={1.8} />} label="Live Rooms" active={isActive("/session")} />
+                    </>
+                )}
 
                 <div className="nav-group-label">Elsewhere</div>
                 <a

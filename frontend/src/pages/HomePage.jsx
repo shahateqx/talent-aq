@@ -64,9 +64,9 @@ function HomePage() {
                                     </button>
                                 </SignInButton>
                             )}
-                            <Link to="/problems" className="btn-void">
-                                Browse problems
-                            </Link>
+                            <a href="#features" className="btn-void">
+                                Explore features
+                            </a>
                         </div>
                     </section>
 
@@ -93,7 +93,7 @@ function HomePage() {
                 </div>
 
                 {/* FEATURE CARDS */}
-                <div className="grid gap-4 md:grid-cols-3">
+                <div id="features" className="grid gap-4 md:grid-cols-3">
                     {features.map((feature) => (
                         <article key={feature.index} className="panel panel-hover group overflow-hidden">
                             <div className="flex min-h-[210px] flex-col justify-between p-6">
