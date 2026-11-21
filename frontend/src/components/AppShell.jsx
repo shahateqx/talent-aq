@@ -68,10 +68,15 @@ function AppShell({ children, flush = false, topbarActions = null }) {
                     <Code2Icon className="size-4 shrink-0" strokeWidth={1.8} />
                     <span className="nav-label">Source</span>
                 </a>
-                <Link to="/" className="nav-item">
+                <a
+                    href="https://www.linkedin.com/in/md-shajjat-hossain-shahat/"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="nav-item"
+                >
                     <ArrowUpRightIcon className="size-4 shrink-0" strokeWidth={1.8} />
                     <span className="nav-label">About</span>
-                </Link>
+                </a>
 
                 <div className="sidebar-bottom">
                     {isSignedIn ? (
