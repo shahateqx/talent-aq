@@ -2,100 +2,86 @@ import { Code2, Clock, Users, Trophy, Loader } from "lucide-react";
 import { getDifficultyBadgeClass } from "../lib/utils";
 import { formatDistanceToNow } from "date-fns";
 
-function RecentSessions({ sessions, isLoading }) {
+function SessionCard({ session, index }) {
     return (
-        <div className="card bg-base-100 border-2 border-accent/20 hover:border-accent/30 mt-8">
-            <div className="card-body">
-                <div className="flex items-center gap-3 mb-6">
-                    <div className="p-2 bg-gradient-to-br from-accent to-secondary rounded-xl">
-                        <Clock className="w-5 h-5 text-white" />
-                    </div>
-                    <h2 className="text-2xl font-black">Your Past Sessions</h2>
+        <div className="group relative overflow-hidden rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-[var(--line-strong)]">
+            <span className="absolute right-5 top-4 font-mono text-[11px] text-[#5d626c]">
+                {String(index + 1).padStart(2, "0")}
+            </span>
+
+            {session.status === "active" && (
+                <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-[rgba(140,197,162,0.25)] bg-[rgba(140,197,162,0.08)] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#a5dcb9]">
+                    <span className="pulse-dot size-1.5 rounded-full bg-[#8cc5a2]" />
+                    Active
+                </span>
+            )}
+
+            <div className="mb-5 flex items-start gap-3">
+                <span className="grid size-11 shrink-0 place-items-center rounded-xl border border-[var(--line)] bg-gradient-to-br from-[#2a251c] to-[#12151c]">
+                    <Code2 className="size-5 text-[var(--gold)]" strokeWidth={1.5} />
+                </span>
+                <div className="min-w-0 pt-0.5">
+                    <h3 className="truncate pr-8 font-semibold text-[#f0ece3]">{session.problem}</h3>
+                    <span className={`badge mt-2 ${getDifficultyBadgeClass(session.difficulty)}`}>
+                        {session.difficulty}
+                    </span>
                 </div>
+            </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {isLoading ? (
-                        <div className="col-span-full flex items-center justify-center py-20">
-                            <Loader className="w-10 h-10 animate-spin text-primary" />
-                        </div>
-                    ) : sessions.length > 0 ? (
-                        sessions.map((session) => (
-                            <div
-                                key={session._id}
-                                className={`card relative ${session.status === "active"
-                                        ? "bg-success/10 border-success/30 hover:border-success/60"
-                                        : "bg-base-200 border-base-300 hover:border-primary/30"
-                                    }`}
-                            >
-                                {session.status === "active" && (
-                                    <div className="absolute top-3 right-3">
-                                        <div className="badge badge-success gap-1">
-                                            <div className="w-1.5 h-1.5 bg-success rounded-full animate-pulse" />
-                                            ACTIVE
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div className="card-body p-5">
-                                    <div className="flex items-start gap-3 mb-4">
-                                        <div
-                                            className={`w-12 h-12 rounded-xl flex items-center justify-center ${session.status === "active"
-                                                    ? "bg-gradient-to-br from-success to-success/70"
-                                                    : "bg-gradient-to-br from-primary to-secondary"
-                                                }`}
-                                        >
-                                            <Code2 className="w-6 h-6 text-white" />
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <h3 className="font-bold text-base mb-1 truncate">{session.problem}</h3>
-                                            <span
-                                                className={`badge badge-sm ${getDifficultyBadgeClass(session.difficulty)}`}
-                                            >
-                                                {session.difficulty}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="space-y-2 text-sm opacity-80 mb-4">
-                                        <div className="flex items-center gap-2">
-                                            <Clock className="w-4 h-4" />
-                                            <span>
-                                                {formatDistanceToNow(new Date(session.createdAt), {
-                                                    addSuffix: true,
-                                                })}
-                                            </span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            <Users className="w-4 h-4" />
-                                            <span>
-                                                {session.participant ? "2" : "1"} participant
-                                                {session.participant ? "s" : ""}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center justify-between pt-3 border-t border-base-300">
-                                        <span className="text-xs font-semibold opacity-80 uppercase">Completed</span>
-                                        <span className="text-xs opacity-40">
-                                            {new Date(session.updatedAt).toLocaleDateString()}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        <div className="col-span-full text-center py-16">
-                            <div className="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-accent/20 to-secondary/20 rounded-3xl flex items-center justify-center">
-                                <Trophy className="w-10 h-10 text-accent/50" />
-                            </div>
-                            <p className="text-lg font-semibold opacity-70 mb-1">No sessions yet</p>
-                            <p className="text-sm opacity-50">Start your coding journey today!</p>
-                        </div>
-                    )}
+            <div className="space-y-2 text-xs text-[#8d919b]">
+                <div className="flex items-center gap-2">
+                    <Clock className="size-3.5 text-[var(--gold-dim)]" strokeWidth={1.6} />
+                    {formatDistanceToNow(new Date(session.createdAt), { addSuffix: true })}
                 </div>
+                <div className="flex items-center gap-2">
+                    <Users className="size-3.5 text-[var(--gold-dim)]" strokeWidth={1.6} />
+                    {session.participant ? "2 participants" : "1 participant"}
+                </div>
+            </div>
+
+            <div className="mt-5 flex items-center justify-between border-t border-[var(--line)] pt-4">
+                <span className="eyebrow !tracking-[0.14em] !text-[#777c86]">Completed</span>
+                <span className="text-[11px] text-[#6f747e]">
+                    {new Date(session.updatedAt).toLocaleDateString()}
+                </span>
             </div>
         </div>
     );
 }
 
+function RecentSessions({ sessions, isLoading }) {
+    return (
+        <section className="surface mt-6 p-6 lg:p-7">
+            <div className="mb-7 flex flex-wrap items-end justify-between gap-3">
+                <div>
+                    <span className="eyebrow">The archive</span>
+                    <h2 className="display-serif mt-2 text-3xl text-[#f3efe6]">Your past sessions</h2>
+                </div>
+                <span className="text-xs text-[#7d818b]">{sessions.length} recorded</span>
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {isLoading ? (
+                    <div className="col-span-full grid place-items-center py-20">
+                        <Loader className="size-8 animate-spin text-[var(--gold)]" strokeWidth={1.5} />
+                    </div>
+                ) : sessions.length > 0 ? (
+                    sessions.map((session, index) => (
+                        <SessionCard key={session._id} session={session} index={index} />
+                    ))
+                ) : (
+                    <div className="col-span-full grid place-items-center py-16 text-center">
+                        <span className="mb-5 grid size-20 place-items-center rounded-full border border-[var(--line)] bg-white/[0.02]">
+                            <Trophy className="size-8 text-[var(--gold-dim)]" strokeWidth={1.2} />
+                        </span>
+                        <p className="text-base font-medium text-[#d7d4cc]">No sessions yet</p>
+                        <p className="mt-1 text-sm text-[#7f838d]">
+                            Your solved problems will live here.
+                        </p>
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+}
 export default RecentSessions;

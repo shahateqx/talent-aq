@@ -25,7 +25,23 @@ function App() {
         <Route path="/session/:id" element={isSignedIn ? <SessionPage /> : <Navigate to={"/"} />} />
       </Routes>
 
-      <Toaster toastOptions={{ duration: 3000 }} />
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "rgba(17, 21, 29, 0.96)",
+            color: "#e9e6df",
+            border: "1px solid rgba(226, 205, 168, 0.18)",
+            borderRadius: "14px",
+            boxShadow: "0 24px 60px -24px rgba(0,0,0,0.9)",
+            backdropFilter: "blur(14px)",
+            fontFamily: "DM Sans, sans-serif",
+          },
+          success: { iconTheme: { primary: "#d8b98a", secondary: "#11151d" } },
+          error: { iconTheme: { primary: "#d98e88", secondary: "#11151d" } },
+        }}
+      />
     </>
   );
 }

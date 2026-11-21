@@ -96,7 +96,7 @@ function SessionPage() {
     };
 
     return (
-        <div className="h-screen bg-base-100 flex flex-col">
+        <div className="flex h-screen flex-col bg-[#0b0e14]">
             <Navbar />
 
             <div className="flex-1">
@@ -106,26 +106,32 @@ function SessionPage() {
                         <PanelGroup direction="vertical">
                             {/* PROBLEM DSC PANEL */}
                             <Panel defaultSize={50} minSize={20}>
-                                <div className="h-full overflow-y-auto bg-base-200">
+                                <div className="h-full overflow-y-auto bg-[#0c0f15]">
                                     {/* HEADER SECTION */}
-                                    <div className="p-6 bg-base-100 border-b border-base-300">
-                                        <div className="flex items-start justify-between mb-3">
+                                    <div className="border-b border-[var(--line)] bg-[#0e1118] px-6 py-6">
+                                        <div className="mb-3 flex items-start justify-between gap-4">
                                             <div>
-                                                <h1 className="text-3xl font-bold text-base-content">
+                                                <span className="eyebrow">Problem brief</span>
+                                                <h1 className="display-serif mt-2 text-[34px] leading-tight text-[#f3efe6]">
                                                     {session?.problem || "Loading..."}
                                                 </h1>
                                                 {problemData?.category && (
-                                                    <p className="text-base-content/60 mt-1">{problemData.category}</p>
+                                                    <p className="mt-1 text-[11px] uppercase tracking-[0.16em] text-[#7f838d]">
+                                                        {problemData.category}
+                                                    </p>
                                                 )}
-                                                <p className="text-base-content/60 mt-2">
-                                                    Host: {session?.host?.name || "Loading..."} •{" "}
-                                                    {session?.participant ? 2 : 1}/2 participants
+                                                <p className="mt-3 text-xs text-[#8d919b]">
+                                                    Host:{" "}
+                                                    <span className="text-[#c9c6bf]">
+                                                        {session?.host?.name || "Loading..."}
+                                                    </span>{" "}
+                                                    · {session?.participant ? 2 : 1}/2 participants
                                                 </p>
                                             </div>
 
                                             <div className="flex items-center gap-3">
                                                 <span
-                                                    className={`badge badge-lg ${getDifficultyBadgeClass(
+                                                    className={`badge ${getDifficultyBadgeClass(
                                                         session?.difficulty
                                                     )}`}
                                                 >
@@ -136,7 +142,7 @@ function SessionPage() {
                                                     <button
                                                         onClick={handleEndSession}
                                                         disabled={endSessionMutation.isPending}
-                                                        className="btn btn-error btn-sm gap-2"
+                                                        className="btn btn-error btn-sm gap-2 !px-5 !text-xs"
                                                     >
                                                         {endSessionMutation.isPending ? (
                                                             <Loader2Icon className="w-4 h-4 animate-spin" />
@@ -147,7 +153,7 @@ function SessionPage() {
                                                     </button>
                                                 )}
                                                 {session?.status === "completed" && (
-                                                    <span className="badge badge-ghost badge-lg">Completed</span>
+                                                    <span className="badge badge-ghost">Completed</span>
                                                 )}
                                             </div>
                                         </div>
@@ -156,8 +162,8 @@ function SessionPage() {
                                     <div className="p-6 space-y-6">
                                         {/* problem desc */}
                                         {problemData?.description && (
-                                            <div className="bg-base-100 rounded-xl shadow-sm p-5 border border-base-300">
-                                                <h2 className="text-xl font-bold mb-4 text-base-content">Description</h2>
+                                            <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
+                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Description</h2>
                                                 <div className="space-y-3 text-base leading-relaxed">
                                                     <p className="text-base-content/90">{problemData.description.text}</p>
                                                     {problemData.description.notes?.map((note, idx) => (
@@ -171,8 +177,8 @@ function SessionPage() {
 
                                         {/* examples section */}
                                         {problemData?.examples && problemData.examples.length > 0 && (
-                                            <div className="bg-base-100 rounded-xl shadow-sm p-5 border border-base-300">
-                                                <h2 className="text-xl font-bold mb-4 text-base-content">Examples</h2>
+                                            <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
+                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Examples</h2>
 
                                                 <div className="space-y-4">
                                                     {problemData.examples.map((example, idx) => (
@@ -181,16 +187,16 @@ function SessionPage() {
                                                                 <span className="badge badge-sm">{idx + 1}</span>
                                                                 <p className="font-semibold text-base-content">Example {idx + 1}</p>
                                                             </div>
-                                                            <div className="bg-base-200 rounded-lg p-4 font-mono text-sm space-y-1.5">
+                                                            <div className="space-y-2 rounded-xl border border-[var(--line)] bg-[#080a0f]/70 p-4 font-mono text-[13px]">
                                                                 <div className="flex gap-2">
-                                                                    <span className="text-primary font-bold min-w-[70px]">
-                                                                        Input:
+                                                                    <span className="min-w-[62px] text-[var(--gold)]">
+                                                                        Input
                                                                     </span>
                                                                     <span>{example.input}</span>
                                                                 </div>
                                                                 <div className="flex gap-2">
-                                                                    <span className="text-secondary font-bold min-w-[70px]">
-                                                                        Output:
+                                                                    <span className="min-w-[62px] text-[#93ada6]">
+                                                                        Output
                                                                     </span>
                                                                     <span>{example.output}</span>
                                                                 </div>
@@ -211,8 +217,8 @@ function SessionPage() {
 
                                         {/* Constraints */}
                                         {problemData?.constraints && problemData.constraints.length > 0 && (
-                                            <div className="bg-base-100 rounded-xl shadow-sm p-5 border border-base-300">
-                                                <h2 className="text-xl font-bold mb-4 text-base-content">Constraints</h2>
+                                            <div className="rounded-2xl border border-[var(--line)] bg-white/[0.018] p-5">
+                                                <h2 className="eyebrow mb-4 !tracking-[0.18em]">Constraints</h2>
                                                 <ul className="space-y-2 text-base-content/90">
                                                     {problemData.constraints.map((constraint, idx) => (
                                                         <li key={idx} className="flex gap-2">
@@ -227,7 +233,7 @@ function SessionPage() {
                                 </div>
                             </Panel>
 
-                            <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
+                            <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />
 
                             <Panel defaultSize={50} minSize={20}>
                                 <PanelGroup direction="vertical">
@@ -242,7 +248,7 @@ function SessionPage() {
                                         />
                                     </Panel>
 
-                                    <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
+                                    <PanelResizeHandle className="h-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-row-resize" />
 
                                     <Panel defaultSize={30} minSize={15}>
                                         <OutputPanel output={output} />
@@ -252,28 +258,28 @@ function SessionPage() {
                         </PanelGroup>
                     </Panel>
 
-                    <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
+                    <PanelResizeHandle className="w-1.5 bg-[var(--line)] transition-colors hover:bg-[var(--gold-dim)] cursor-col-resize" />
 
                     {/* RIGHT PANEL - VIDEO CALLS & CHAT */}
                     <Panel defaultSize={50} minSize={30}>
-                        <div className="h-full bg-base-200 p-4 overflow-auto">
+                        <div className="h-full overflow-auto bg-[#0c0f15] p-4">
                             {isInitializingCall ? (
                                 <div className="h-full flex items-center justify-center">
                                     <div className="text-center">
-                                        <Loader2Icon className="w-12 h-12 mx-auto animate-spin text-primary mb-4" />
-                                        <p className="text-lg">Connecting to video call...</p>
+                                        <Loader2Icon className="mx-auto mb-4 size-10 animate-spin text-[var(--gold)]" strokeWidth={1.5} />
+                                        <p className="eyebrow">Connecting to video call</p>
                                     </div>
                                 </div>
                             ) : !streamClient || !call ? (
                                 <div className="h-full flex items-center justify-center">
-                                    <div className="card bg-base-100 shadow-xl max-w-md">
-                                        <div className="card-body items-center text-center">
-                                            <div className="w-24 h-24 bg-error/10 rounded-full flex items-center justify-center mb-4">
-                                                <PhoneOffIcon className="w-12 h-12 text-error" />
-                                            </div>
-                                            <h2 className="card-title text-2xl">Connection Failed</h2>
-                                            <p className="text-base-content/70">Unable to connect to the video call</p>
+                                    <div className="surface max-w-md p-8 text-center">
+                                        <div className="mx-auto mb-5 grid size-20 place-items-center rounded-full border border-[rgba(217,142,136,0.25)] bg-[rgba(217,142,136,0.08)]">
+                                            <PhoneOffIcon className="size-8 text-[#e6a49f]" strokeWidth={1.5} />
                                         </div>
+                                        <h2 className="display-serif text-3xl text-[#f3efe6]">Connection failed</h2>
+                                        <p className="mt-2 text-sm text-[#8d919b]">
+                                            We couldn't connect to the video call. Try rejoining the session.
+                                        </p>
                                     </div>
                                 </div>
                             ) : (

@@ -1,22 +1,46 @@
 function OutputPanel({ output }) {
     return (
-        <div className="h-full bg-base-100 flex flex-col">
-            <div className="px-4 py-2 bg-base-200 border-b border-base-300 font-semibold text-sm">
-                Output
+        <div className="flex h-full flex-col bg-[#0b0e14]">
+            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[#0e1118] px-4 py-2.5">
+                <div className="flex items-center gap-2.5">
+                    <span className="flex gap-1.5">
+                        <span className="size-2 rounded-full bg-[#d98e88]/60" />
+                        <span className="size-2 rounded-full bg-[#d9b877]/60" />
+                        <span className="size-2 rounded-full bg-[#8cc5a2]/60" />
+                    </span>
+                    <span className="eyebrow !text-[10px] !tracking-[0.18em] !text-[#8d919b]">
+                        Console
+                    </span>
+                </div>
+                {output && (
+                    <span
+                        className={`flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] ${
+                            output.success ? "text-[#a5dcb9]" : "text-[#e6a49f]"
+                        }`}
+                    >
+                        <span
+                            className={`size-1.5 rounded-full ${
+                                output.success ? "bg-[#8cc5a2]" : "bg-[#d98e88]"
+                            }`}
+                        />
+                        {output.success ? "Passed" : "Error"}
+                    </span>
+                )}
             </div>
-            <div className="flex-1 overflow-auto p-4">
+
+            <div className="min-h-0 flex-1 overflow-auto p-5 font-mono text-[13px] leading-relaxed">
                 {output === null ? (
-                    <p className="text-base-content/50 text-sm">Click "Run Code" to see the output here...</p>
+                    <p className="font-sans text-sm text-[#666b75]">
+                        Run your code to see the output here.
+                    </p>
                 ) : output.success ? (
-                    <pre className="text-sm font-mono text-success whitespace-pre-wrap">{output.output}</pre>
+                    <pre className="whitespace-pre-wrap text-[#a5dcb9]">{output.output}</pre>
                 ) : (
-                    <div>
+                    <div className="space-y-3">
                         {output.output && (
-                            <pre className="text-sm font-mono text-base-content whitespace-pre-wrap mb-2">
-                                {output.output}
-                            </pre>
+                            <pre className="whitespace-pre-wrap text-[#b6b3ac]">{output.output}</pre>
                         )}
-                        <pre className="text-sm font-mono text-error whitespace-pre-wrap">{output.error}</pre>
+                        <pre className="whitespace-pre-wrap text-[#e6a49f]">{output.error}</pre>
                     </div>
                 )}
             </div>

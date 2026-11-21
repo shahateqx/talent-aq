@@ -21,67 +21,73 @@ function VideoCallUI({ chatClient, channel }) {
 
     if (callingState === CallingState.JOINING) {
         return (
-            <div className="h-full flex items-center justify-center">
+            <div className="grid h-full place-items-center">
                 <div className="text-center">
-                    <Loader2Icon className="w-12 h-12 mx-auto animate-spin text-primary mb-4" />
-                    <p className="text-lg">Joining call...</p>
+                    <Loader2Icon
+                        className="mx-auto mb-4 size-10 animate-spin text-[var(--gold)]"
+                        strokeWidth={1.5}
+                    />
+                    <p className="eyebrow">Joining call</p>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="h-full flex gap-3 relative str-video">
-            <div className="flex-1 flex flex-col gap-3">
-                {/* Participants count badge and Chat Toggle */}
-                <div className="flex items-center justify-between gap-2 bg-base-100 p-3 rounded-lg shadow">
-                    <div className="flex items-center gap-2">
-                        <UsersIcon className="w-5 h-5 text-primary" />
-                        <span className="font-semibold">
-                            {participantCount} {participantCount === 1 ? "participant" : "participants"}
+        <div className="str-video relative flex h-full gap-3">
+            <div className="flex min-w-0 flex-1 flex-col gap-3">
+                <div className="flex items-center justify-between rounded-2xl border border-[var(--line)] bg-white/[0.025] px-4 py-3">
+                    <div className="flex items-center gap-2.5">
+                        <UsersIcon className="size-4 text-[var(--gold)]" strokeWidth={1.6} />
+                        <span className="text-[13px] font-medium text-[#d7d4cc]">
+                            {participantCount}{" "}
+                            {participantCount === 1 ? "participant" : "participants"}
                         </span>
                     </div>
                     {chatClient && channel && (
                         <button
                             onClick={() => setIsChatOpen(!isChatOpen)}
-                            className={`btn btn-sm gap-2 ${isChatOpen ? "btn-primary" : "btn-ghost"}`}
+                            className={`inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.1em] transition-all ${
+                                isChatOpen
+                                    ? "border-[rgba(216,185,138,0.4)] bg-[rgba(216,185,138,0.12)] text-[var(--gold-bright)]"
+                                    : "border-[var(--line)] text-[#9a9da6] hover:border-[var(--line-strong)] hover:text-[#e9e6df]"
+                            }`}
                             title={isChatOpen ? "Hide chat" : "Show chat"}
                         >
-                            <MessageSquareIcon className="size-4" />
+                            <MessageSquareIcon className="size-3.5" />
                             Chat
                         </button>
                     )}
                 </div>
 
-                <div className="flex-1 bg-base-300 rounded-lg overflow-hidden relative">
+                <div className="relative min-h-0 flex-1 overflow-hidden rounded-2xl border border-[var(--line)] bg-[#0b0e14]">
                     <SpeakerLayout />
                 </div>
 
-                <div className="bg-base-100 p-3 rounded-lg shadow flex justify-center">
+                <div className="flex justify-center rounded-2xl border border-[var(--line)] bg-white/[0.025] px-3 py-2">
                     <CallControls onLeave={() => navigate("/dashboard")} />
                 </div>
             </div>
 
-            {/* CHAT SECTION */}
-
             {chatClient && channel && (
                 <div
-                    className={`flex flex-col rounded-lg shadow overflow-hidden bg-[#272a30] transition-all duration-300 ease-in-out ${isChatOpen ? "w-80 opacity-100" : "w-0 opacity-0"
-                        }`}
+                    className={`flex flex-col overflow-hidden rounded-2xl border border-[var(--line)] bg-[#0d1016] shadow-[0_24px_60px_-40px_rgba(0,0,0,1)] transition-all duration-300 ease-in-out ${
+                        isChatOpen ? "w-80 opacity-100" : "w-0 border-transparent opacity-0"
+                    }`}
                 >
                     {isChatOpen && (
                         <>
-                            <div className="bg-[#1c1e22] p-3 border-b border-[#3a3d44] flex items-center justify-between">
-                                <h3 className="font-semibold text-white">Session Chat</h3>
+                            <div className="flex items-center justify-between border-b border-[var(--line)] bg-[#10131a] px-4 py-3">
+                                <span className="eyebrow !text-[10px]">Session chat</span>
                                 <button
                                     onClick={() => setIsChatOpen(false)}
-                                    className="text-gray-400 hover:text-white transition-colors"
+                                    className="grid size-7 place-items-center rounded-full text-[#8d919b] transition-colors hover:bg-white/[0.06] hover:text-[#e9e6df]"
                                     title="Close chat"
                                 >
-                                    <XIcon className="size-5" />
+                                    <XIcon className="size-4" />
                                 </button>
                             </div>
-                            <div className="flex-1 overflow-hidden stream-chat-dark">
+                            <div className="min-h-0 flex-1 overflow-hidden stream-chat-dark">
                                 <Chat client={chatClient} theme="str-chat__theme-dark">
                                     <Channel channel={channel}>
                                         <Window>

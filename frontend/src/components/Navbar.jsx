@@ -5,66 +5,60 @@ import { UserButton } from "@clerk/clerk-react";
 function Navbar() {
     const location = useLocation();
 
-    console.log(location);
-
-    const isActive = (path) => location.pathname === path;
+    const isActive = (path) =>
+        location.pathname === path || location.pathname.startsWith(`${path}/`);
 
     return (
-        <nav className="bg-base-100/80 backdrop-blur-md border-b border-primary/20 sticky top-0 z-50 shadow-lg">
-            <div className="max-w-7xl mx-auto p-4 flex items-center justify-between">
-                {/* LOGO */}
-                <Link
-                    to="/"
-                    className="group flex items-center gap-3 hover:scale-105 transition-transform duration-200"
-                >
-                    <div className="size-10 rounded-xl bg-gradient-to-r from-primary via-secondary to-accent flex items-center justify-center shadow-lg ">
-                        <SparklesIcon className="size-6 text-white" />
-                    </div>
-
-                    <div className="flex flex-col">
-                        <span className="font-black text-xl bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent font-mono tracking-wider">
-                            Talent AQ
+        <nav className="sticky top-0 z-50 border-b border-[var(--line)] bg-[#0a0d13]/85 backdrop-blur-xl">
+            <div className="max-w-7xl mx-auto px-5 h-[72px] flex items-center justify-between">
+                <Link to="/dashboard" className="group flex items-center gap-3">
+                    <span className="relative size-10 rounded-xl border border-[var(--line-strong)] bg-gradient-to-br from-[#2b261d] to-[#12151c] grid place-items-center shadow-[0_10px_30px_-16px_rgba(216,185,138,0.6)] transition-transform duration-300 group-hover:scale-105">
+                        <SparklesIcon className="size-[18px] text-[var(--gold-bright)]" strokeWidth={1.6} />
+                    </span>
+                    <span className="flex flex-col leading-none">
+                        <span className="display-serif text-[22px] tracking-wide text-[#f3efe6]">
+                            Talent <span className="text-[var(--gold-bright)] italic">AQ</span>
                         </span>
-                        <span className="text-xs text-base-content/60 font-medium -mt-1">an sX9 project</span>
-                    </div>
+                        <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.28em] text-[#7d818c]">
+                            An sX9 Project
+                        </span>
+                    </span>
                 </Link>
 
-                <div className="flex items-center gap-1">
-                    {/* PROBLEMS PAGE LINK */}
-                    <Link
-                        to={"/problems"}
-                        className={`px-4 py-2.5 rounded-lg transition-all duration-200 
-              ${isActive("/problems")
-                                ? "bg-primary text-primary-content"
-                                : "hover:bg-base-200 text-base-content/70 hover:text-base-content"
-                            }
-              
-              `}
-                    >
-                        <div className="flex items-center gap-x-2.5">
-                            <BookOpenIcon className="size-4" />
-                            <span className="font-medium hidden sm:inline">Problems</span>
-                        </div>
-                    </Link>
+                <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 rounded-full border border-[var(--line)] bg-white/[0.02] p-1">
+                        <Link
+                            to="/problems"
+                            className={`relative flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all duration-200 ${
+                                isActive("/problems")
+                                    ? "bg-[rgba(216,185,138,0.12)] text-[var(--gold-bright)]"
+                                    : "text-[#9a9da6] hover:bg-white/[0.04] hover:text-[#e9e6df]"
+                            }`}
+                        >
+                            <BookOpenIcon className="size-4" strokeWidth={1.7} />
+                            <span className="hidden font-medium sm:inline">Problems</span>
+                            {isActive("/problems") && (
+                                <span className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-[var(--gold)]" />
+                            )}
+                        </Link>
 
-                    {/* DASHBORD PAGE LINK */}
-                    <Link
-                        to={"/dashboard"}
-                        className={`px-4 py-2.5 rounded-lg transition-all duration-200 
-              ${isActive("/dashboard")
-                                ? "bg-primary text-primary-content"
-                                : "hover:bg-base-200 text-base-content/70 hover:text-base-content"
-                            }
-              
-              `}
-                    >
-                        <div className="flex items-center gap-x-2.5">
-                            <LayoutDashboardIcon className="size-4" />
-                            <span className="font-medium hidden sm:inline">Dashbord</span>
-                        </div>
-                    </Link>
+                        <Link
+                            to="/dashboard"
+                            className={`relative flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-all duration-200 ${
+                                isActive("/dashboard")
+                                    ? "bg-[rgba(216,185,138,0.12)] text-[var(--gold-bright)]"
+                                    : "text-[#9a9da6] hover:bg-white/[0.04] hover:text-[#e9e6df]"
+                            }`}
+                        >
+                            <LayoutDashboardIcon className="size-4" strokeWidth={1.7} />
+                            <span className="hidden font-medium sm:inline">Dashboard</span>
+                            {isActive("/dashboard") && (
+                                <span className="absolute bottom-1 left-1/2 size-1 -translate-x-1/2 rounded-full bg-[var(--gold)]" />
+                            )}
+                        </Link>
+                    </div>
 
-                    <div className="ml-4 mt-2">
+                    <div className="ml-2 border-l border-[var(--line)] pl-4">
                         <UserButton />
                     </div>
                 </div>
