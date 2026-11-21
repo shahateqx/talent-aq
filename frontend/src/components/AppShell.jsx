@@ -7,7 +7,7 @@ import {
     PlusIcon,
     SearchIcon,
 } from "lucide-react";
-import { SignInButton, SignOutButton, useUser } from "@clerk/clerk-react";
+import { SignInButton, SignOutButton, UserButton, useUser } from "@clerk/clerk-react";
 
 function BrandMark() {
     return (
@@ -113,9 +113,32 @@ function AppShell({ children, flush = false, topbarActions = null }) {
                     <div className="flex items-center gap-4">
                         {topbarActions}
                         {isSignedIn && (
-                            <span className="micro hidden lg:inline">
-                                HI, {(user?.firstName || "DEV").toUpperCase()}
-                            </span>
+                            <div className="flex items-center gap-3">
+                                <span className="micro hidden lg:inline">
+                                    HI, {(user?.firstName || "DEV").toUpperCase()}
+                                </span>
+                                <UserButton
+                                    appearance={{
+                                        variables: {
+                                            colorPrimary: "#e8ff3a",
+                                            colorBackground: "#111316",
+                                            colorText: "#f2f2ef",
+                                            colorTextSecondary: "#8b9097",
+                                            borderRadius: "0.25rem",
+                                        },
+                                        elements: {
+                                            avatarBox: "!size-8 !rounded-[3px]",
+                                            userButtonTrigger: "!rounded-[3px]",
+                                            userButtonPopoverCard:
+                                                "!bg-[#111316] !border !border-[#30353b] !rounded-[4px]",
+                                            userButtonPopoverActionButton:
+                                                "!text-[#f2f2ef] hover:!bg-[#1a1d21]",
+                                            userButtonPopoverActionButtonText: "!text-[#f2f2ef]",
+                                            userButtonPopoverFooter: "!bg-[#0d0f12] !border-t !border-[#23262b]",
+                                        },
+                                    }}
+                                />
+                            </div>
                         )}
                         <Link to="/problems" className="text-[#8b9097] transition-colors hover:text-[var(--lime)]" aria-label="Browse problems">
                             <SearchIcon className="size-[17px]" strokeWidth={1.7} />
