@@ -32,7 +32,6 @@ function HostProblemPicker({ problems, selectedProblemId, onSelect, onConfirm, o
 
     return (
         <div className="relative h-full overflow-y-auto bg-[#0c0f15] p-6 lg:p-8">
-            <div className="glow-orb -left-24 -top-24 size-72 bg-[rgba(163,126,72,0.12)]" />
             <div className="relative mx-auto w-full max-w-lg">
                 <span className="inline-flex items-center gap-2 rounded-full border border-[rgba(216,185,138,0.25)] bg-[rgba(216,185,138,0.07)] px-4 py-2">
                     <span className="size-1.5 rounded-full bg-[var(--lime)]" />
