@@ -516,17 +516,17 @@ print(largest_rectangle_area([1]))  # 1`,
 export const LANGUAGE_CONFIG = {
     javascript: {
         name: "JavaScript",
-        icon: "/javascript.png",
+        icon: "/javascript.svg",
         monacoLang: "javascript",
     },
     python: {
         name: "Python",
-        icon: "/python.png",
+        icon: "/python.svg",
         monacoLang: "python",
     },
     java: {
         name: "Java",
-        icon: "/java.png",
+        icon: "/java.svg",
         monacoLang: "java",
     },
 };

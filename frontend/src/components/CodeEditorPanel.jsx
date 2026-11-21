@@ -49,7 +49,7 @@ function CodeEditorPanel({
                 <div className="flex items-center gap-3">
                     <img src={language.icon} alt={language.name} className="size-5 opacity-90" />
                     <select
-                        className="select !min-h-8 !border-transparent !bg-transparent !px-1 !text-[11px] uppercase tracking-[0.1em] hover:!border-[var(--line)]"
+                        className="select !min-h-8 !w-auto !min-w-[112px] !border-transparent !bg-transparent !px-1 !pr-6 !text-[11px] uppercase tracking-[0.06em] hover:!border-[var(--line)]"
                         value={selectedLanguage}
                         onChange={onLanguageChange}
                     >
