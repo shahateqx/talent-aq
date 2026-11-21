@@ -20,7 +20,7 @@ function NavItem({ to, icon, label, active }) {
     );
 }
 
-function AppShell({ children, flush = false }) {
+function AppShell({ children, flush = false, topbarActions = null }) {
     const location = useLocation();
     const { isSignedIn, user } = useUser();
     const isActive = (path) => location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -96,6 +96,7 @@ function AppShell({ children, flush = false }) {
                         <span className="hidden md:inline-flex"><i className="dot dot-green" /> 10 problems loaded</span>
                     </div>
                     <div className="flex items-center gap-4">
+                        {topbarActions}
                         {isSignedIn && (
                             <span className="micro hidden lg:inline">
                                 HI, {(user?.firstName || "DEV").toUpperCase()}

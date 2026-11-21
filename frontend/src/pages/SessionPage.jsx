@@ -235,7 +235,25 @@ function SessionPage() {
     };
 
     return (
-        <AppShell flush>
+        <AppShell
+            flush
+            topbarActions={
+                isHost && session?.status === "active" ? (
+                    <button
+                        onClick={handleEndSession}
+                        disabled={endSessionMutation.isPending}
+                        className="inline-flex items-center gap-2 border border-[rgba(255,61,129,0.4)] bg-[rgba(255,61,129,0.08)] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.1em] text-[#ff87ae] transition-colors hover:bg-[rgba(255,61,129,0.18)]"
+                    >
+                        {endSessionMutation.isPending ? (
+                            <Loader2Icon className="size-3.5 animate-spin" />
+                        ) : (
+                            <LogOutIcon className="size-3.5" />
+                        )}
+                        End session
+                    </button>
+                ) : null
+            }
+        >
             <div className="h-full">
                 <PanelGroup direction="horizontal">
                     {/* LEFT PANEL - CODE EDITOR & PROBLEM DETAILS */}
@@ -297,20 +315,6 @@ function SessionPage() {
                                                     >
                                                         Change
                                                         <ChevronRightIcon className="size-3.5" />
-                                                    </button>
-                                                )}
-                                                {isHost && session?.status === "active" && (
-                                                    <button
-                                                        onClick={handleEndSession}
-                                                        disabled={endSessionMutation.isPending}
-                                                        className="btn btn-error btn-sm gap-2 !px-5 !text-xs"
-                                                    >
-                                                        {endSessionMutation.isPending ? (
-                                                            <Loader2Icon className="w-4 h-4 animate-spin" />
-                                                        ) : (
-                                                            <LogOutIcon className="w-4 h-4" />
-                                                        )}
-                                                        End Session
                                                     </button>
                                                 )}
                                                 {session?.status === "completed" && (

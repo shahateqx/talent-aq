@@ -1,6 +1,12 @@
 import Editor from "@monaco-editor/react";
-import { Loader2Icon, PlayIcon } from "lucide-react";
+import { ChevronDownIcon, Loader2Icon, PlayIcon } from "lucide-react";
 import { LANGUAGE_CONFIG } from "../data/problems";
+
+const LANGUAGE_BADGES = {
+    javascript: { label: "JS", className: "bg-[#f7df1e] text-[#0b0c0e]" },
+    python: { label: "PY", className: "bg-[#3776ab] text-[#ffd43b]" },
+    java: { label: "JV", className: "bg-[#e76f00] text-[#ffffff]" },
+};
 
 function defineStudioTheme(monaco) {
     monaco.editor.defineTheme("talent-override", {
@@ -47,18 +53,25 @@ function CodeEditorPanel({
         <div className="flex h-full flex-col bg-[#0c0e11]">
             <div className="flex items-center justify-between border-b border-[var(--line)] bg-[#0e1013] px-4 py-2.5">
                 <div className="flex items-center gap-3">
-                    <img src={language.icon} alt={language.name} className="size-5 opacity-90" />
-                    <select
-                        className="select !min-h-8 !w-auto !min-w-[112px] !border-transparent !bg-transparent !px-1 !pr-6 !text-[11px] uppercase tracking-[0.06em] hover:!border-[var(--line)]"
-                        value={selectedLanguage}
-                        onChange={onLanguageChange}
+                    <span
+                        className={`grid size-5 shrink-0 place-items-center border border-white/10 font-mono text-[9px] font-bold leading-none ${LANGUAGE_BADGES[selectedLanguage].className}`}
                     >
-                        {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
-                            <option key={key} value={key} className="bg-[#111316]">
-                                {lang.name}
-                            </option>
-                        ))}
-                    </select>
+                        {LANGUAGE_BADGES[selectedLanguage].label}
+                    </span>
+                    <div className="relative flex items-center">
+                        <select
+                            className="select !min-h-8 !w-[116px] !shrink-0 !appearance-none !border-transparent !bg-transparent !px-1 !pr-5 !text-[11px] uppercase tracking-[0.04em] hover:!border-[var(--line)]"
+                            value={selectedLanguage}
+                            onChange={onLanguageChange}
+                        >
+                            {Object.entries(LANGUAGE_CONFIG).map(([key, lang]) => (
+                                <option key={key} value={key} className="bg-[#111316]">
+                                    {lang.name}
+                                </option>
+                            ))}
+                        </select>
+                        <ChevronDownIcon className="pointer-events-none absolute right-0 size-3 text-[var(--muted)]" />
+                    </div>
                     <span className="h-4 w-px bg-[var(--line)]" />
                     <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-[#5d6269]">
                         main.{selectedLanguage === "python" ? "py" : selectedLanguage === "java" ? "java" : "js"}
