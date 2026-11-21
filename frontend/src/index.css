@@ -5,7 +5,7 @@
     themes: false;
 }
 
-/* Talent AQ — "Override Studio" */
+/* PAIRSTACK — "Override Studio" */
 @plugin "daisyui/theme" {
     name: "override";
     default: true;

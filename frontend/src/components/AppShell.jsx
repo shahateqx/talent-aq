@@ -7,9 +7,18 @@ import {
     PlusIcon,
     RadioIcon,
     SearchIcon,
-    SparklesIcon,
 } from "lucide-react";
 import { SignInButton, SignOutButton, useUser } from "@clerk/clerk-react";
+
+function BrandMark() {
+    return (
+        <svg viewBox="0 0 24 24" className="size-[19px]" aria-hidden="true">
+            <polyline points="9.5,7 4.5,12 9.5,17" fill="none" stroke="#22d3ee" strokeWidth="2.4" strokeLinecap="square" strokeLinejoin="miter" />
+            <polyline points="14.5,7 19.5,12 14.5,17" fill="none" stroke="#e8ff3a" strokeWidth="2.4" strokeLinecap="square" strokeLinejoin="miter" />
+            <line x1="13.8" y1="5.5" x2="10.2" y2="18.5" stroke="#ff3d81" strokeWidth="2.2" strokeLinecap="square" />
+        </svg>
+    );
+}
 
 function NavItem({ to, icon, label, active }) {
     return (
@@ -30,11 +39,15 @@ function AppShell({ children, flush = false, topbarActions = null }) {
             <aside className="sidebar">
                 <Link to="/" className="brand">
                     <span className="brand-mark">
-                        <SparklesIcon className="size-[18px] text-[var(--lime)]" strokeWidth={1.8} />
+                        <BrandMark />
                     </span>
                     <span className="brand-copy">
-                        <span className="brand-name block">Talent<br />AQ</span>
-                        <span className="brand-sub block">COLLABORATIVE CODING STUDIO</span>
+                        <span className="brand-name block">
+                            PAIR
+                            <br />
+                            <span className="text-[var(--lime)]">//</span>STACK
+                        </span>
+                        <span className="brand-sub block">LIVE CODING STUDIO</span>
                     </span>
                 </Link>
 

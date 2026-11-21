@@ -1,7 +1,7 @@
 {
-  "name": "talent-aq",
+  "name": "pairstack",
   "version": "1.0.0",
-  "description": "Md. Shajjat Hossain Shahat - Dhaka City College - BRAC University - Shahatx9 - Fiverr Freelancer - Sahat - Interview Platform - MERN Stack",
+  "description": "PAIRSTACK — a live coding studio for pair programming, interview practice, and shared problem solving.",
   "main": "index.js",
   "scripts": {
     "build": "npm install --prefix backend --include=dev && npm install --prefix frontend --include=dev && npm run build --prefix frontend",

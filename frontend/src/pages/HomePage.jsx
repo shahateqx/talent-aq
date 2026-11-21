@@ -133,7 +133,7 @@ function HomePage() {
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-3 pb-4 pt-2">
-                    <span className="micro">Talent AQ — an sX9 project</span>
+                    <span className="micro">PAIRSTACK — an sX9 project</span>
                     <span className="micro">Built for people who love the craft.</span>
                 </div>
             </div>
